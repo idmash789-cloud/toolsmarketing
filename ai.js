@@ -76,13 +76,26 @@ function tmSaveSettings(s) {
   localStorage.setItem(TM_AI_KEY, JSON.stringify(s));
 }
 
+function tmNormalizeBaseUrl(raw, providerKey) {
+  let u = (raw || "").trim().replace(/\/+$/, "");
+  if (!u) return u;
+  // Kesalahan umum: user menyalin URL dari address bar dashboard 9Router
+  // (http://localhost:20128/dashboard) — itu halaman web, BUKAN endpoint API.
+  u = u.replace(/\/dashboard$/i, "").replace(/\/login$/i, "").replace(/\/+$/, "");
+  // Untuk 9Router, endpoint API selalu berakhiran /v1
+  if (providerKey === "router9" && /^https?:\/\/[^\/]+$/.test(u)) {
+    u += "/v1";
+  }
+  return u;
+}
+
 function tmEffective(settings) {
   const p = PROVIDERS[settings.provider] || PROVIDERS.groq;
   return {
     provider: settings.provider,
     label: p.label,
     model: (settings.model || "").trim() || p.defaultModel,
-    baseUrl: (settings.baseUrl || "").trim() || p.defaultBase,
+    baseUrl: tmNormalizeBaseUrl((settings.baseUrl || "").trim() || p.defaultBase, settings.provider),
     apiKey: (settings.apiKey || "").trim(),
     def: p,
   };
@@ -199,7 +212,7 @@ async function tmAiGenerate(specText, toolLabel, rawSettings, fetchImpl) {
   } catch (netErr) {
     let extra = "";
     if (e.provider === "router9") {
-      extra = " Pastikan aplikasi 9Router sedang jalan di komputer yang SAMA dengan browser ini, dan bila situs dibuka via HTTPS gunakan URL tunnel HTTPS sebagai Base URL.";
+      extra = " Cek 3 hal: (1) aplikasi 9Router sedang jalan di komputer yang SAMA dengan browser ini; (2) Base URL harus persis http://localhost:20128/v1 — BUKAN /dashboard (itu alamat halaman web 9Router); (3) bila situs Tools Marketing ini dibuka dari alamat HTTPS (GitHub Pages), browser memblokir panggilan ke http://localhost — solusinya aktifkan Tunnel di dashboard 9Router (tombol Enable di baris Tunnel) lalu pakai URL tunnel HTTPS-nya sebagai Base URL, atau buka file aplikasi ini secara lokal di komputer yang sama.";
     }
     throw new Error("Tidak bisa menghubungi " + e.label + " (" + (netErr && netErr.message ? netErr.message : "network error") + ")." + extra);
   }
