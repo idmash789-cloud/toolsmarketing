@@ -392,11 +392,23 @@ function renderForm(){
     }
 
     if (input) {
-      div.appendChild(input);
       input.addEventListener("input", () => {
         formValues[f.name] = input.value;
         validate();
       });
+      if (f.type === "text" || f.type === "textarea") {
+        /* Bungkus agar dropdown riwayat bisa diposisikan relatif ke field. */
+        const wrapEl = document.createElement("div");
+        wrapEl.className = "hist-wrap";
+        wrapEl.appendChild(input);
+        div.appendChild(wrapEl);
+        input.addEventListener("input", () => tmHistRefresh(input, f.name));
+        input.addEventListener("focus", () => tmHistOpenDD(input, f.name));
+        input.addEventListener("blur", () => tmHistAddOne(f.name, input.value));
+        input.addEventListener("keydown", e => tmHistKey(e, input, f.name));
+      } else {
+        div.appendChild(input);
+      }
     }
 
     if (f.fillFrom) {
@@ -470,6 +482,8 @@ function collectInputs(){
 
 async function onGenerate(){
   const inputs = collectInputs();
+  /* Simpan isian ke riwayat agar bisa dipakai ulang di semua tool. */
+  tmHistSaveToolInputs(currentTool, inputs);
   const specText = currentTool.build(inputs);
   const mode = getMode();
   const box = $("output-box"), load = $("loading-box");
@@ -500,6 +514,219 @@ async function onGenerate(){
   } finally {
     validate();
   }
+}
+
+/* ---------- RIWAYAT ISIAN (input history) ----------
+ * Menyimpan teks yang pernah diisi di kolom input (per NAMA field, lintas
+ * semua tool), lalu menampilkannya sebagai rekomendasi yang bisa diklik.
+ * Penyimpanan: localStorage kunci TM_HIST_KEY = { namaField: [teks...] }.
+ * Hanya field form tool (text/textarea). Field AI settings (khususnya
+ * API key) TIDAK disentuh sama sekali.
+ * Fungsi di bawah sengaja murni/parameterisasi (storage-like object)
+ * agar bisa di-unit-test di node. */
+
+const TM_HIST_KEY = "tm_input_history_v1";
+const TM_HIST_MAX = 10;
+
+function tmHistNorm(v){ return (v == null ? "" : String(v)).trim().toLowerCase(); }
+
+function tmHistLoad(storage){
+  try {
+    const raw = storage.getItem(TM_HIST_KEY);
+    if (!raw) return {};
+    const o = JSON.parse(raw);
+    if (o && typeof o === "object" && !Array.isArray(o)) return o;
+  } catch (e) { /* JSON korup -> mulai dari kosong */ }
+  return {};
+}
+
+function tmHistSave(storage, store){
+  try { storage.setItem(TM_HIST_KEY, JSON.stringify(store)); }
+  catch (e) { /* abaikan: localStorage penuh / diblokir */ }
+}
+
+/* Tambah nilai; terbaru di depan, dedup case-insensitive (casing terbaru
+ * yang menang), max TM_HIST_MAX, abaikan nilai < 2 karakter. */
+function tmHistAdd(store, field, value){
+  const v = (value == null ? "" : String(value)).trim();
+  if (!field || v.length < 2) return false;
+  const n = tmHistNorm(v);
+  const list = Array.isArray(store[field]) ? store[field] : [];
+  const rest = list.filter(e => tmHistNorm(e) !== n);
+  rest.unshift(v);
+  store[field] = rest.slice(0, TM_HIST_MAX);
+  return true;
+}
+
+function tmHistRemove(store, field, value){
+  const list = store[field];
+  if (!Array.isArray(list)) return false;
+  const n = tmHistNorm(value);
+  const rest = list.filter(e => tmHistNorm(e) !== n);
+  if (rest.length === list.length) return false;
+  if (rest.length === 0) delete store[field];
+  else store[field] = rest;
+  return true;
+}
+
+function tmHistClear(store, field){
+  if (store && Object.prototype.hasOwnProperty.call(store, field)) {
+    delete store[field];
+    return true;
+  }
+  return false;
+}
+
+/* Filter substring case-insensitive; query kosong -> semua (salinan). */
+function tmHistFilter(list, query){
+  const q = tmHistNorm(query);
+  const arr = Array.isArray(list) ? list : [];
+  if (!q) return arr.slice();
+  return arr.filter(e => tmHistNorm(e).indexOf(q) !== -1);
+}
+
+/* Helper runtime browser: baca-tambah-simpan satu nilai. */
+function tmHistAddOne(field, value){
+  const store = tmHistLoad(localStorage);
+  if (tmHistAdd(store, field, value)) tmHistSave(localStorage, store);
+}
+
+/* Simpan semua field text/textarea dari inputs (dipanggil saat Generate). */
+function tmHistSaveToolInputs(tool, inputs){
+  if (!tool || !tool.fields || !inputs) return;
+  const store = tmHistLoad(localStorage);
+  let changed = false;
+  tool.fields.forEach(f => {
+    if (f.type === "text" || f.type === "textarea") {
+      if (tmHistAdd(store, f.name, inputs[f.name])) changed = true;
+    }
+  });
+  if (changed) tmHistSave(localStorage, store);
+}
+
+/* ---------- UI dropdown riwayat ---------- */
+let tmHistOpen = null; /* { panel, input, field, hl, items, paint } */
+
+function tmHistClose(){
+  if (tmHistOpen && tmHistOpen.panel && tmHistOpen.panel.parentNode) {
+    tmHistOpen.panel.parentNode.removeChild(tmHistOpen.panel);
+  }
+  tmHistOpen = null;
+}
+
+function tmHistOpenDD(input, field){
+  const store = tmHistLoad(localStorage);
+  const list = store[field] || [];
+  if (!list.length) { tmHistClose(); return; }
+  tmHistRenderDD(input, field, list, input.value);
+}
+
+function tmHistRenderDD(input, field, list, query){
+  tmHistClose();
+  const items = tmHistFilter(list, query);
+  if (!items.length) return; /* tidak ada yang cocok -> jangan buka */
+  const wrap = (input.closest && input.closest(".hist-wrap")) || input.parentNode;
+  const panel = document.createElement("div");
+  panel.className = "hist-dd";
+  const st = { panel, input, field, hl: -1, items, paint: null };
+  tmHistOpen = st;
+
+  function paint(){
+    panel.innerHTML = "";
+    if (!st.items.length) { tmHistClose(); return; }
+    st.items.forEach((txt, ix) => {
+      const row = document.createElement("div");
+      row.className = "hist-row" + (ix === st.hl ? " hl" : "");
+      const sp = document.createElement("span");
+      sp.className = "txt";
+      sp.textContent = txt;
+      sp.title = txt;
+      const del = document.createElement("button");
+      del.type = "button";
+      del.className = "del";
+      del.textContent = "✕";
+      del.title = "Hapus isian ini dari riwayat";
+      del.addEventListener("mousedown", e => e.preventDefault());
+      del.addEventListener("click", e => {
+        e.stopPropagation();
+        const store2 = tmHistLoad(localStorage);
+        if (tmHistRemove(store2, field, txt)) tmHistSave(localStorage, store2);
+        const rest = store2[field] || [];
+        st.items = tmHistFilter(rest, input.value);
+        if (st.hl >= st.items.length) st.hl = st.items.length - 1;
+        paint();
+      });
+      row.appendChild(sp);
+      row.appendChild(del);
+      row.addEventListener("mousedown", e => e.preventDefault());
+      row.addEventListener("click", () => tmHistPick(st, ix));
+      row.addEventListener("mouseenter", () => { st.hl = ix; paint(); });
+      panel.appendChild(row);
+    });
+    const foot = document.createElement("div");
+    foot.className = "hist-foot";
+    foot.textContent = "🧹 Bersihkan riwayat kolom ini";
+    foot.addEventListener("mousedown", e => e.preventDefault());
+    foot.addEventListener("click", e => {
+      e.stopPropagation();
+      const store3 = tmHistLoad(localStorage);
+      tmHistClear(store3, field);
+      tmHistSave(localStorage, store3);
+      tmHistClose();
+      input.focus();
+    });
+    panel.appendChild(foot);
+  }
+  st.paint = paint;
+  paint();
+  if (!tmHistOpen) return; /* paint() menutup karena daftar kosong */
+  wrap.appendChild(panel);
+}
+
+function tmHistRefresh(input, field){
+  const st = tmHistOpen;
+  if (!st || st.input !== input) return;
+  const store = tmHistLoad(localStorage);
+  const items = tmHistFilter(store[field] || [], input.value);
+  if (!items.length) { tmHistClose(); return; }
+  st.items = items;
+  if (st.hl >= items.length) st.hl = items.length - 1;
+  st.paint();
+}
+
+function tmHistPick(st, ix){
+  const txt = st.items[ix];
+  if (txt == null) return;
+  st.input.value = txt;
+  tmHistClose();
+  /* picu listener "input" bawaan form agar formValues + validasi ter-update */
+  st.input.dispatchEvent(new Event("input", { bubbles: true }));
+  st.input.focus();
+}
+
+function tmHistKey(e, input, field){
+  if (e.key !== "ArrowDown" && e.key !== "ArrowUp" && e.key !== "Enter") return;
+  const st = tmHistOpen;
+  if (!st || st.input !== input) {
+    if (e.key === "ArrowDown") { tmHistOpenDD(input, field); e.preventDefault(); }
+    return;
+  }
+  if (e.key === "ArrowDown") {
+    st.hl = Math.min(st.hl + 1, st.items.length - 1);
+    e.preventDefault();
+  } else if (e.key === "ArrowUp") {
+    st.hl = Math.max(st.hl - 1, 0);
+    e.preventDefault();
+  } else if (e.key === "Enter") {
+    if (st.hl >= 0 && st.items[st.hl] != null) {
+      tmHistPick(st, st.hl);
+      e.preventDefault();
+    } else {
+      tmHistClose(); /* biarkan Enter normal (newline di textarea) */
+    }
+    return;
+  }
+  st.paint();
 }
 
 function showOutput(text){
@@ -619,6 +846,15 @@ document.addEventListener("DOMContentLoaded", () => {
   $("set-provider").addEventListener("change", syncProviderUI);
   $("settings-modal").addEventListener("click", (e) => {
     if (e.target.id === "settings-modal") $("settings-modal").classList.add("hidden");
+  });
+  /* Tutup dropdown riwayat saat klik di luar atau tekan Escape. */
+  document.addEventListener("click", (e) => {
+    if (tmHistOpen && !e.target.closest(".hist-dd") && !e.target.closest(".hist-wrap")) {
+      tmHistClose();
+    }
+  }, true);
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") tmHistClose();
   });
   const foot = document.createElement("footer");
   foot.textContent = "Tools Marketing — berjalan 100% di browser-mu. API key (Mode AI) hanya tersimpan di localStorage perangkatmu.";

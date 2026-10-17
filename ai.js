@@ -106,11 +106,17 @@ function tmNormalizeBaseUrl(raw, providerKey) {
 
 function tmEffective(settings) {
   const p = PROVIDERS[settings.provider] || PROVIDERS.groq;
+  // Base URL tersimpan HANYA berlaku untuk provider yang kolom Base URL-nya
+  // memang tampil & bisa diedit (Custom, 9Router). Untuk provider lain kolom
+  // itu tersembunyi — memakai nilai lama dari provider sebelumnya (mis. sisa
+  // alamat Kie /anthropic atau tamandata) akan merusak request tanpa terlihat.
+  const editableBase = settings.provider === "custom" || settings.provider === "router9";
+  const rawBase = editableBase ? ((settings.baseUrl || "").trim() || p.defaultBase) : p.defaultBase;
   return {
     provider: settings.provider,
     label: p.label,
     model: (settings.model || "").trim() || p.defaultModel,
-    baseUrl: tmNormalizeBaseUrl((settings.baseUrl || "").trim() || p.defaultBase, settings.provider),
+    baseUrl: tmNormalizeBaseUrl(rawBase, settings.provider),
     apiKey: (settings.apiKey || "").trim(),
     def: p,
   };
@@ -119,7 +125,13 @@ function tmEffective(settings) {
 /* Kie AI menempatkan nama model di JALUR URL, bukan di body request:
  * POST https://api.kie.ai/{model}/v1/chat/completions */
 function tmKieRoot(baseUrl) {
-  return (baseUrl || "").replace(/\/+$/, "").replace(/\/(api\/v1|v1)$/i, "");
+  // Akar Kie selalu hanya skema + host (https://api.kie.ai) — jalur apa pun
+  // yang terbawa di belakangnya (mis. /anthropic/v1 sisa pengaturan lama)
+  // harus dibuang, kalau tidak URL-nya jadi dobel: /anthropic/api/v1/...
+  const raw = (baseUrl || "").trim();
+  try { return new URL(raw).origin; } catch (e) { /* lanjut ke fallback */ }
+  const m = raw.match(/^(https?:\/\/[^\/]+)/i);
+  return m ? m[1] : "https://api.kie.ai";
 }
 
 /* Instruksi pembungkus: AI diminta menghasilkan HASIL AKHIR, bukan prompt. */
