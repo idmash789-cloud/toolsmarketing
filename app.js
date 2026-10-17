@@ -628,8 +628,18 @@ function tmHistRenderDD(input, field, list, query){
   const wrap = (input.closest && input.closest(".hist-wrap")) || input.parentNode;
   const panel = document.createElement("div");
   panel.className = "hist-dd";
-  const st = { panel, input, field, hl: -1, items, paint: null };
+  const st = { panel, input, field, hl: -1, items, paint: null, paintHl: null };
   tmHistOpen = st;
+
+  /* Sorot baris TANPA membangun ulang DOM. Versi lama memanggil paint()
+   * (innerHTML="") saat mouseenter — node yang sedang dihover/diklik hancur
+   * di tengah gestur, sehingga event click tidak pernah tuntas di browser
+   * (gejala: saran terlihat tapi tidak bisa diklik). */
+  function paintHl(){
+    const rows = panel.querySelectorAll(".hist-row");
+    rows.forEach((r, i) => r.classList.toggle("hl", i === st.hl));
+  }
+  st.paintHl = paintHl;
 
   function paint(){
     panel.innerHTML = "";
@@ -658,9 +668,15 @@ function tmHistRenderDD(input, field, list, query){
       });
       row.appendChild(sp);
       row.appendChild(del);
-      row.addEventListener("mousedown", e => e.preventDefault());
-      row.addEventListener("click", () => tmHistPick(st, ix));
-      row.addEventListener("mouseenter", () => { st.hl = ix; paint(); });
+      /* Pilih langsung saat mousedown (bukan click): lebih kebal terhadap
+       * perubahan DOM/fokus di antara tekan & lepas tombol mouse.
+       * Tombol ✕ dikecualikan — klik di sana untuk menghapus, bukan memilih. */
+      row.addEventListener("mousedown", e => {
+        if (e.target && e.target.closest && e.target.closest(".del")) return;
+        e.preventDefault();
+        tmHistPick(st, ix);
+      });
+      row.addEventListener("mouseenter", () => { st.hl = ix; paintHl(); });
       panel.appendChild(row);
     });
     const foot = document.createElement("div");
@@ -726,7 +742,7 @@ function tmHistKey(e, input, field){
     }
     return;
   }
-  st.paint();
+  if (st.paintHl) st.paintHl(); else st.paint();
 }
 
 function showOutput(text){
