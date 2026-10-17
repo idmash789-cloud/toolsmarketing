@@ -558,6 +558,36 @@ function syncProviderUI(){
   $("wrap-baseurl").style.display = (p === "custom" || p === "router9") ? "" : "none";
   if (!$("set-baseurl").value && p === "router9") $("set-baseurl").value = def.defaultBase;
 }
+async function onFetchModels(){
+  const btn = $("btn-fetch-models");
+  const status = $("models-status");
+  btn.disabled = true;
+  status.textContent = "Menghubungi endpoint untuk mengambil daftar model…";
+  try {
+    const ids = await tmFetchModels({
+      provider: $("set-provider").value,
+      model: $("set-model").value.trim(),
+      baseUrl: $("set-baseurl").value.trim(),
+      apiKey: $("set-apikey").value.trim(),
+    });
+    const sel = $("set-model-list");
+    sel.innerHTML = "";
+    const first = document.createElement("option");
+    first.value = ""; first.textContent = "— pilih model —";
+    sel.appendChild(first);
+    ids.forEach((id) => {
+      const o = document.createElement("option");
+      o.value = id; o.textContent = id;
+      sel.appendChild(o);
+    });
+    $("wrap-model-list").style.display = "";
+    status.textContent = "Ditemukan " + ids.length + " model resmi dari endpoint ini. Pilih salah satu di bawah, lalu Simpan.";
+  } catch (err) {
+    status.textContent = "⚠️ " + (err && err.message ? err.message : String(err));
+  } finally {
+    btn.disabled = false;
+  }
+}
 function saveSettings(){
   const s = {
     provider: $("set-provider").value,
@@ -582,6 +612,10 @@ document.addEventListener("DOMContentLoaded", () => {
   $("btn-ai-settings").addEventListener("click", openSettings);
   $("btn-close-settings").addEventListener("click", () => $("settings-modal").classList.add("hidden"));
   $("btn-save-settings").addEventListener("click", saveSettings);
+  $("btn-fetch-models").addEventListener("click", onFetchModels);
+  $("set-model-list").addEventListener("change", (e) => {
+    if (e.target.value) $("set-model").value = e.target.value;
+  });
   $("set-provider").addEventListener("change", syncProviderUI);
   $("settings-modal").addEventListener("click", (e) => {
     if (e.target.id === "settings-modal") $("settings-modal").classList.add("hidden");

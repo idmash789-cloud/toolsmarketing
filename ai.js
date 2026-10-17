@@ -162,6 +162,40 @@ function tmBuildRequest(specText, toolLabel, settings) {
   };
 }
 
+/* Ambil daftar model resmi dari endpoint (GET {baseUrl}/models, standar
+ * OpenAI-compatible). Dijalankan dari browser user dengan key user sendiri,
+ * jadi nama model tidak perlu ditebak-tebak. */
+async function tmFetchModels(rawSettings, fetchImpl) {
+  const fetchFn = fetchImpl || fetch;
+  const e = tmEffective(rawSettings);
+  if (e.def.geminiStyle) {
+    throw new Error("Provider Gemini tidak memakai daftar /models seperti ini. Isi nama model manual, mis. gemini-2.0-flash.");
+  }
+  if (!e.baseUrl) throw new Error("Base URL belum diisi.");
+  const url = e.baseUrl.replace(/\/+$/, "") + "/models";
+  const headers = {};
+  if (e.apiKey) headers["Authorization"] = "Bearer " + e.apiKey;
+  let res;
+  try {
+    res = await fetchFn(url, { method: "GET", headers });
+  } catch (netErr) {
+    throw new Error("Tidak bisa menghubungi " + url + " (" + (netErr && netErr.message ? netErr.message : "network error") + "). Periksa Base URL (harus diawali https://) dan koneksi internet.");
+  }
+  const bodyText = await res.text().catch(() => "");
+  if (!res.ok) throw new Error(tmFriendlyError(res.status, bodyText, e));
+  let json = null;
+  try { json = JSON.parse(bodyText); } catch (jErr) {
+    throw new Error("Respons daftar model tidak bisa diparse: " + bodyText.slice(0, 200));
+  }
+  let ids = [];
+  if (Array.isArray(json.data)) ids = json.data.map((m) => (typeof m === "string" ? m : m && m.id)).filter(Boolean);
+  else if (Array.isArray(json.models)) ids = json.models.map((m) => (typeof m === "string" ? m : m && (m.id || m.name))).filter(Boolean);
+  else if (Array.isArray(json)) ids = json.map((m) => (typeof m === "string" ? m : m && m.id)).filter(Boolean);
+  ids = Array.from(new Set(ids)).sort();
+  if (!ids.length) throw new Error("Endpoint menjawab, tapi daftar modelnya kosong. Tanya daftar model ke penyedia endpoint-nya, lalu isi kolom Model manual.");
+  return ids;
+}
+
 function tmParseResponse(json, provider) {
   if (provider === "gemini") {
     const c = json && json.candidates && json.candidates[0];
