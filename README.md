@@ -18,6 +18,22 @@ Provider yang didukung (Mode AI): OpenAI, OpenRouter, Groq (default resmi `opena
 
 API key dimasukkan lewat ikon ⚙️ **Pengaturan AI** dan disimpan **hanya di browser pengunjung** (localStorage). Tidak ada di kode, tidak ada di repo ini. Jangan kirim API key lewat chat ke siapa pun.
 
+## Mode AI via 9Router (jalur anti-CORS)
+
+Panggilan browser langsung ke `http://localhost:20128/v1` kadang gagal dengan
+"Failed to fetch" karena masalah CORS di 9Router (preflight OPTIONS ditolak).
+Jalur server lokal ini mem-bypass itu sepenuhnya — browser bicara ke server ini
+(same-origin), server yang meneruskan ke 9Router.
+
+1. Pastikan 9Router sedang jalan (dashboard: `http://localhost:20128/dashboard`).
+2. Di folder aplikasi ini jalankan: `node server.js`
+3. Buka di browser: `http://localhost:8090`
+4. Panel AI (ikon ⚙): Provider = **9Router (lokal)**, Base URL =
+   `http://localhost:8090/proxy9/v1`, Model & API Key = sama seperti di
+   dashboard 9Router-mu.
+
+Butuh Node.js terinstal (tanpa dependensi npm tambahan).
+
 ## Menjalankan
 
 Cukup buka `index.html` di browser, atau hosting statis apa pun (GitHub Pages, Netlify, dsb). Tidak perlu build step.

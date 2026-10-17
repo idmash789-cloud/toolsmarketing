@@ -49,7 +49,7 @@ const PROVIDERS = {
     defaultBase: "http://localhost:20128/v1",
     chatUrl: (s) => s.baseUrl.replace(/\/+$/, "") + "/chat/completions",
     openaiStyle: true,
-    hint: "Model harus SAMA PERSIS dengan yang ada di dashboard 9Router-mu (mis. kr/claude-sonnet-4.5 atau nama combo). 9Router harus jalan di komputer yang SAMA dengan browser ini; kalau situs dibuka via HTTPS, pakai URL tunnel HTTPS (Cloudflare/Tailscale) sebagai Base URL.",
+    hint: "Model harus SAMA PERSIS dengan yang ada di dashboard 9Router-mu (mis. kr/claude-sonnet-4.5 atau nama combo). 9Router harus jalan di komputer yang SAMA dengan browser ini; kalau situs dibuka via HTTPS, pakai URL tunnel HTTPS (Cloudflare/Tailscale) sebagai Base URL. Jika panggilan langsung ke http://localhost:20128/v1 selalu gagal 'Failed to fetch' (masalah CORS 9Router), jalankan 'node server.js' di folder aplikasi, buka http://localhost:8090, dan isi Base URL dengan http://localhost:8090/proxy9/v1.",
   },
   custom: {
     label: "Custom (OpenAI-compatible)",
@@ -79,6 +79,11 @@ function tmSaveSettings(s) {
 function tmNormalizeBaseUrl(raw, providerKey) {
   let u = (raw || "").trim().replace(/\/+$/, "");
   if (!u) return u;
+  // Kesalahan umum: skema http(s):// lupa ditulis (mis. "tamandata.cloud/v1").
+  // Tanpa skema, browser menganggapnya alamat relatif dan request pasti gagal.
+  if (!/^https?:\/\//i.test(u)) {
+    u = (/^(localhost|127\.)/i.test(u) ? "http://" : "https://") + u;
+  }
   // Kesalahan umum: user menyalin URL dari address bar dashboard 9Router
   // (http://localhost:20128/dashboard) — itu halaman web, BUKAN endpoint API.
   u = u.replace(/\/dashboard$/i, "").replace(/\/login$/i, "").replace(/\/+$/, "");
