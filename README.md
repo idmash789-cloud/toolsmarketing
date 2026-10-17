@@ -12,7 +12,7 @@ Web app statis (tanpa backend) berisi 4 tool untuk riset & produksi iklan Meta A
 - **Mode Prompt (gratis, default):** hasil generate adalah *prompt* detail berbahasa Indonesia, siap ditempel ke ChatGPT / Gemini / AI favoritmu.
 - **Mode AI (BYOK):** prompt yang sama dikirim ke LLM pilihanmu dan menghasilkan *hasil akhir* langsung di web ini.
 
-Provider yang didukung (Mode AI): OpenAI, OpenRouter, Groq (default resmi `openai/gpt-oss-120b`), Google Gemini, 9Router (endpoint lokal `http://localhost:20128/v1`), dan Custom OpenAI-compatible.
+Provider yang didukung (Mode AI): OpenAI, OpenRouter, Groq (default resmi `openai/gpt-oss-120b`), Google Gemini, **Kie AI** (chat via api.kie.ai), 9Router (endpoint lokal `http://localhost:20128/v1`), dan Custom OpenAI-compatible.
 
 ## Privasi API key
 
@@ -33,6 +33,23 @@ Jalur server lokal ini mem-bypass itu sepenuhnya — browser bicara ke server in
    dashboard 9Router-mu.
 
 Butuh Node.js terinstal (tanpa dependensi npm tambahan).
+
+## Provider Kie AI
+
+Kie AI tidak memakai skema base-URL + model-di-body seperti OpenAI — nama
+model ada di **jalur URL**: `https://api.kie.ai/{model}/v1/chat/completions`.
+Aplikasi ini sudah menanganinya khusus lewat provider **Kie AI**:
+
+1. Buat API key di `kie.ai/api-key`.
+2. Panel AI (ikon ⚙): Provider = **Kie AI**, API Key = key dari kie.ai.
+   Kolom Base URL tidak perlu diisi (default `https://api.kie.ai`).
+3. Klik **🔄 Ambil daftar model dari endpoint** — pilih salah satu model
+   chat yang muncul (default: `gemini-3-flash`).
+4. Simpan, lalu Generate seperti biasa.
+
+Catatan: model keluarga **Claude tidak didukung** di jalur ini (format
+protokolnya berbeda — Anthropic Messages). Pakai model Gemini atau model
+chat lainnya.
 
 ## Menjalankan
 

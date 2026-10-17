@@ -1,1 +1,333 @@
-LyogVG9vbHMgTWFya2V0aW5nIOKAlCBBSSBCWU9LIGxheWVyCiAqIFNldGlhcCB2aXNpdG9yIG1lbWFzdWtrYW4gQVBJIGtleS1ueWEgc2VuZGlyaS4gS2V5IGRpc2ltcGFuIEhBTllBIGRpCiAqIGJyb3dzZXItbnlhIChsb2NhbFN0b3JhZ2UpLCB0aWRhayBwZXJuYWggZGkga29kZS9yZXBvL3NlcnZlciBtYW5hcHVuLiAqLwoKY29uc3QgVE1fQUlfS0VZID0gInRtX2FpX3NldHRpbmdzIjsKCmNvbnN0IFBST1ZJREVSUyA9IHsKICBvcGVuYWk6IHsKICAgIGxhYmVsOiAiT3BlbkFJIiwKICAgIGRlZmF1bHRNb2RlbDogImdwdC00by1taW5pIiwKICAgIGRlZmF1bHRCYXNlOiAiaHR0cHM6Ly9hcGkub3BlbmFpLmNvbS92MSIsCiAgICBjaGF0VXJsOiAocykgPT4gcy5iYXNlVXJsLnJlcGxhY2UoL1wvKyQvLCAiIikgKyAiL2NoYXQvY29tcGxldGlvbnMiLAogICAgb3BlbmFpU3R5bGU6IHRydWUsCiAgICBoaW50OiAiQ29udG9oIG1vZGVsOiBncHQtNG8tbWluaSwgZ3B0LTRvLiIsCiAgfSwKICBvcGVucm91dGVyOiB7CiAgICBsYWJlbDogIk9wZW5Sb3V0ZXIiLAogICAgZGVmYXVsdE1vZGVsOiAibWV0YS1sbGFtYS9sbGFtYS0zLjMtNzBiLWluc3RydWN0IiwKICAgIGRlZmF1bHRCYXNlOiAiaHR0cHM6Ly9vcGVucm91dGVyLmFpL2FwaS92MSIsCiAgICBjaGF0VXJsOiAocykgPT4gcy5iYXNlVXJsLnJlcGxhY2UoL1wvKyQvLCAiIikgKyAiL2NoYXQvY29tcGxldGlvbnMiLAogICAgb3BlbmFpU3R5bGU6IHRydWUsCiAgICBleHRyYUhlYWRlcnM6ICgpID0+ICh7CiAgICAgICJIVFRQLVJlZmVyZXIiOiBsb2NhdGlvbi5vcmlnaW4sCiAgICAgICJYLVRpdGxlIjogIlRvb2xzIE1hcmtldGluZyIsCiAgICB9KSwKICAgIGhpbnQ6ICJDYXJpIG1vZGVsIGdyYXRpcyBkaSBvcGVucm91dGVyLmFpL21vZGVscyBsYWx1IHR1bGlzIElELW55YSBkaSBzaW5pLiIsCiAgfSwKICBncm9xOiB7CiAgICBsYWJlbDogIkdyb3EiLAogICAgZGVmYXVsdE1vZGVsOiAib3BlbmFpL2dwdC1vc3MtMTIwYiIsCiAgICBkZWZhdWx0QmFzZTogImh0dHBzOi8vYXBpLmdyb3EuY29tL29wZW5haS92MSIsCiAgICBjaGF0VXJsOiAocykgPT4gcy5iYXNlVXJsLnJlcGxhY2UoL1wvKyQvLCAiIikgKyAiL2NoYXQvY29tcGxldGlvbnMiLAogICAgb3BlbmFpU3R5bGU6IHRydWUsCiAgICAvLyBNb2RlbCBsYW1hIEdyb3EgKGxsYW1hLTMuMy03MGItdmVyc2F0aWxlLCBsbGFtYS0zLjEtOGItaW5zdGFudCkgZGlub25ha3RpZmthbgogICAgLy8gdW50dWsgZnJlZS9kZXZlbG9wZXIgdGllciBzZWphayAxNiBBZ3UgMjAyNi4gRGVmYXVsdCByZXNtaSBwZW5nZ2FudGlueWE6CiAgICBhbHRNb2RlbHM6IFsib3BlbmFpL2dwdC1vc3MtMTIwYiIsICJvcGVuYWkvZ3B0LW9zcy0yMGIiLCAicXdlbi9xd2VuMy0zMmIiXSwKICAgIGhpbnQ6ICJEZWZhdWx0IHJlc21pIEdyb3E6IG9wZW5haS9ncHQtb3NzLTEyMGIgLyBncHQtb3NzLTIwYiAvIHF3ZW4vcXdlbjMtMzJiLiBNb2RlbCBsbGFtYS0zLjMvMy4xIGxhbWEgc3VkYWggZGlub25ha3RpZmthbiB1bnR1ayBmcmVlIHRpZXIuIiwKICB9LAogIGdlbWluaTogewogICAgbGFiZWw6ICJHb29nbGUgR2VtaW5pIiwKICAgIGRlZmF1bHRNb2RlbDogImdlbWluaS0yLjAtZmxhc2giLAogICAgZGVmYXVsdEJhc2U6ICJodHRwczovL2dlbmVyYXRpdmVsYW5ndWFnZS5nb29nbGVhcGlzLmNvbS92MWJldGEiLAogICAgZ2VtaW5pU3R5bGU6IHRydWUsCiAgICBoaW50OiAiQ29udG9oIG1vZGVsOiBnZW1pbmktMi4wLWZsYXNoLCBnZW1pbmktMS41LWZsYXNoLiBLZXkgZGlhbWJpbCBkYXJpIEdvb2dsZSBBSSBTdHVkaW8uIiwKICB9LAogIHJvdXRlcjk6IHsKICAgIGxhYmVsOiAiOVJvdXRlciAobG9rYWwpIiwKICAgIGRlZmF1bHRNb2RlbDogImtyL2NsYXVkZS1zb25uZXQtNC41IiwKICAgIGRlZmF1bHRCYXNlOiAiaHR0cDovL2xvY2FsaG9zdDoyMDEyOC92MSIsCiAgICBjaGF0VXJsOiAocykgPT4gcy5iYXNlVXJsLnJlcGxhY2UoL1wvKyQvLCAiIikgKyAiL2NoYXQvY29tcGxldGlvbnMiLAogICAgb3BlbmFpU3R5bGU6IHRydWUsCiAgICBoaW50OiAiTW9kZWwgaGFydXMgU0FNQSBQRVJTSVMgZGVuZ2FuIHlhbmcgYWRhIGRpIGRhc2hib2FyZCA5Um91dGVyLW11IChtaXMuIGtyL2NsYXVkZS1zb25uZXQtNC41IGF0YXUgbmFtYSBjb21ibykuIDlSb3V0ZXIgaGFydXMgamFsYW4gZGkga29tcHV0ZXIgeWFuZyBTQU1BIGRlbmdhbiBicm93c2VyIGluaTsga2FsYXUgc2l0dXMgZGlidWthIHZpYSBIVFRQUywgcGFrYWkgVVJMIHR1bm5lbCBIVFRQUyAoQ2xvdWRmbGFyZS9UYWlsc2NhbGUpIHNlYmFnYWkgQmFzZSBVUkwuIEppa2EgcGFuZ2dpbGFuIGxhbmdzdW5nIGtlIGh0dHA6Ly9sb2NhbGhvc3Q6MjAxMjgvdjEgc2VsYWx1IGdhZ2FsICdGYWlsZWQgdG8gZmV0Y2gnIChtYXNhbGFoIENPUlMgOVJvdXRlciksIGphbGFua2FuICdub2RlIHNlcnZlci5qcycgZGkgZm9sZGVyIGFwbGlrYXNpLCBidWthIGh0dHA6Ly9sb2NhbGhvc3Q6ODA5MCwgZGFuIGlzaSBCYXNlIFVSTCBkZW5nYW4gaHR0cDovL2xvY2FsaG9zdDo4MDkwL3Byb3h5OS92MS4iLAogIH0sCiAgY3VzdG9tOiB7CiAgICBsYWJlbDogIkN1c3RvbSAoT3BlbkFJLWNvbXBhdGlibGUpIiwKICAgIGRlZmF1bHRNb2RlbDogIiIsCiAgICBkZWZhdWx0QmFzZTogIiIsCiAgICBjaGF0VXJsOiAocykgPT4gcy5iYXNlVXJsLnJlcGxhY2UoL1wvKyQvLCAiIikgKyAiL2NoYXQvY29tcGxldGlvbnMiLAogICAgb3BlbmFpU3R5bGU6IHRydWUsCiAgICBoaW50OiAiSXNpIEJhc2UgVVJMIGVuZHBvaW50IE9wZW5BSS1jb21wYXRpYmxlLW11ICsgbmFtYSBtb2RlbCB5YW5nIHRlcnNlZGlhIGRpIHNhbmEuIiwKICB9LAp9OwoKZnVuY3Rpb24gdG1Mb2FkU2V0dGluZ3MoKSB7CiAgdHJ5IHsKICAgIGNvbnN0IHJhdyA9IGxvY2FsU3RvcmFnZS5nZXRJdGVtKFRNX0FJX0tFWSk7CiAgICBpZiAocmF3KSByZXR1cm4gT2JqZWN0LmFzc2lnbigKICAgICAgeyBwcm92aWRlcjogImdyb3EiLCBtb2RlbDogIiIsIGJhc2VVcmw6ICIiLCBhcGlLZXk6ICIiIH0sCiAgICAgIEpTT04ucGFyc2UocmF3KQogICAgKTsKICB9IGNhdGNoIChlKSB7IC8qIGFiYWlrYW4gKi8gfQogIHJldHVybiB7IHByb3ZpZGVyOiAiZ3JvcSIsIG1vZGVsOiAiIiwgYmFzZVVybDogIiIsIGFwaUtleTogIiIgfTsKfQoKZnVuY3Rpb24gdG1TYXZlU2V0dGluZ3MocykgewogIGxvY2FsU3RvcmFnZS5zZXRJdGVtKFRNX0FJX0tFWSwgSlNPTi5zdHJpbmdpZnkocykpOwp9CgpmdW5jdGlvbiB0bU5vcm1hbGl6ZUJhc2VVcmwocmF3LCBwcm92aWRlcktleSkgewogIGxldCB1ID0gKHJhdyB8fCAiIikudHJpbSgpLnJlcGxhY2UoL1wvKyQvLCAiIik7CiAgaWYgKCF1KSByZXR1cm4gdTsKICAvLyBLZXNhbGFoYW4gdW11bTogc2tlbWEgaHR0cChzKTovLyBsdXBhIGRpdHVsaXMgKG1pcy4gInRhbWFuZGF0YS5jbG91ZC92MSIpLgogIC8vIFRhbnBhIHNrZW1hLCBicm93c2VyIG1lbmdhbmdnYXBueWEgYWxhbWF0IHJlbGF0aWYgZGFuIHJlcXVlc3QgcGFzdGkgZ2FnYWwuCiAgaWYgKCEvXmh0dHBzPzpcL1wvL2kudGVzdCh1KSkgewogICAgdSA9ICgvXihsb2NhbGhvc3R8MTI3XC4pL2kudGVzdCh1KSA/ICJodHRwOi8vIiA6ICJodHRwczovLyIpICsgdTsKICB9CiAgLy8gS2VzYWxhaGFuIHVtdW06IHVzZXIgbWVueWFsaW4gVVJMIGRhcmkgYWRkcmVzcyBiYXIgZGFzaGJvYXJkIDlSb3V0ZXIKICAvLyAoaHR0cDovL2xvY2FsaG9zdDoyMDEyOC9kYXNoYm9hcmQpIOKAlCBpdHUgaGFsYW1hbiB3ZWIsIEJVS0FOIGVuZHBvaW50IEFQSS4KICB1ID0gdS5yZXBsYWNlKC9cL2Rhc2hib2FyZCQvaSwgIiIpLnJlcGxhY2UoL1wvbG9naW4kL2ksICIiKS5yZXBsYWNlKC9cLyskLywgIiIpOwogIC8vIEtlc2FsYWhhbiB1bXVtIGxhaW46IHVzZXIgbWVuZW1wZWwgYWxhbWF0IExFTkdLQVAgZGFmdGFyIG1vZGVsCiAgLy8gKGJlcmFraGlyYW4gL21vZGVscykgc2ViYWdhaSBCYXNlIFVSTCDigJQgQmFzZSBVUkwgYWRhbGFoIGFsYW1hdCBkYXNhcm55YSBzYWphLgogIHUgPSB1LnJlcGxhY2UoL1wvbW9kZWxzJC9pLCAiIikucmVwbGFjZSgvXC8rJC8sICIiKTsKICAvLyBVbnR1ayA5Um91dGVyLCBlbmRwb2ludCBBUEkgc2VsYWx1IGJlcmFraGlyYW4gL3YxCiAgaWYgKHByb3ZpZGVyS2V5ID09PSAicm91dGVyOSIgJiYgL15odHRwcz86XC9cL1teXC9dKyQvLnRlc3QodSkpIHsKICAgIHUgKz0gIi92MSI7CiAgfQogIHJldHVybiB1Owp9CgpmdW5jdGlvbiB0bUVmZmVjdGl2ZShzZXR0aW5ncykgewogIGNvbnN0IHAgPSBQUk9WSURFUlNbc2V0dGluZ3MucHJvdmlkZXJdIHx8IFBST1ZJREVSUy5ncm9xOwogIHJldHVybiB7CiAgICBwcm92aWRlcjogc2V0dGluZ3MucHJvdmlkZXIsCiAgICBsYWJlbDogcC5sYWJlbCwKICAgIG1vZGVsOiAoc2V0dGluZ3MubW9kZWwgfHwgIiIpLnRyaW0oKSB8fCBwLmRlZmF1bHRNb2RlbCwKICAgIGJhc2VVcmw6IHRtTm9ybWFsaXplQmFzZVVybCgoc2V0dGluZ3MuYmFzZVVybCB8fCAiIikudHJpbSgpIHx8IHAuZGVmYXVsdEJhc2UsIHNldHRpbmdzLnByb3ZpZGVyKSwKICAgIGFwaUtleTogKHNldHRpbmdzLmFwaUtleSB8fCAiIikudHJpbSgpLAogICAgZGVmOiBwLAogIH07Cn0KCi8qIEluc3RydWtzaSBwZW1idW5na3VzOiBBSSBkaW1pbnRhIG1lbmdoYXNpbGthbiBIQVNJTCBBS0hJUiwgYnVrYW4gcHJvbXB0LiAqLwpmdW5jdGlvbiB0bVdyYXBTcGVjKHNwZWNUZXh0LCB0b29sTGFiZWwpIHsKICByZXR1cm4gKAogICAgIkthbXUgYWRhbGFoIGFzaXN0ZW4gcGVtYXNhcmFuIGJlcmJhaGFzYSBJbmRvbmVzaWEuXG4iICsKICAgICJUdWdhc211OiBtZW5naGFzaWxrYW4gSEFTSUwgQUtISVIgdW50dWsgdG9vbCAnIiArIHRvb2xMYWJlbCArICInLCAiICsKICAgICJtZW5naWt1dGkgc3Blc2lmaWthc2kgZGkgYmF3YWggaW5pIHBlcnNpcy4gIiArCiAgICAiVHVsaXMgTEFOR1NVTkcgaGFzaWwgYWtoaXJueWEgZGFsYW0gQmFoYXNhIEluZG9uZXNpYSB5YW5nIG5hdHVyYWwgZGFuIHNpYXAgcGFrYWkuICIgKwogICAgIkphbmdhbiBtZW5ndWxhbmcgYXRhdSBtZW5hbXBpbGthbiBzcGVzaWZpa2FzaS9wcm9tcHQtbnlhLCBqYW5nYW4gbWVtYmVyaSBwcm9sb2cgc2VwZXJ0aSAiICsKICAgICInQmVyaWt1dCBoYXNpbG55YScg4oCUIGxhbmdzdW5nIGtlIGlzaS5cblxuIiArCiAgICAiPT09IFNQRVNJRklLQVNJID09PVxuIiArIHNwZWNUZXh0CiAgKTsKfQoKZnVuY3Rpb24gdG1CdWlsZFJlcXVlc3Qoc3BlY1RleHQsIHRvb2xMYWJlbCwgc2V0dGluZ3MpIHsKICBjb25zdCBlID0gdG1FZmZlY3RpdmUoc2V0dGluZ3MpOwogIGNvbnN0IGZ1bGxQcm9tcHQgPSB0bVdyYXBTcGVjKHNwZWNUZXh0LCB0b29sTGFiZWwpOwoKICBpZiAoZS5wcm92aWRlciA9PT0gImdlbWluaSIpIHsKICAgIGNvbnN0IHVybCA9CiAgICAgIGUuYmFzZVVybC5yZXBsYWNlKC9cLyskLywgIiIpICsKICAgICAgIi9tb2RlbHMvIiArIGVuY29kZVVSSUNvbXBvbmVudChlLm1vZGVsKSArCiAgICAgICI6Z2VuZXJhdGVDb250ZW50P2tleT0iICsgZW5jb2RlVVJJQ29tcG9uZW50KGUuYXBpS2V5KTsKICAgIHJldHVybiB7CiAgICAgIHByb3ZpZGVyOiAiZ2VtaW5pIiwKICAgICAgdXJsLAogICAgICBvcHRpb25zOiB7CiAgICAgICAgbWV0aG9kOiAiUE9TVCIsCiAgICAgICAgaGVhZGVyczogeyAiQ29udGVudC1UeXBlIjogImFwcGxpY2F0aW9uL2pzb24iIH0sCiAgICAgICAgYm9keTogSlNPTi5zdHJpbmdpZnkoewogICAgICAgICAgY29udGVudHM6IFt7IHBhcnRzOiBbeyB0ZXh0OiBmdWxsUHJvbXB0IH1dIH1dLAogICAgICAgICAgZ2VuZXJhdGlvbkNvbmZpZzogeyB0ZW1wZXJhdHVyZTogMC43IH0sCiAgICAgICAgfSksCiAgICAgIH0sCiAgICB9OwogIH0KCiAgLy8gT3BlbkFJLXN0eWxlIChvcGVuYWksIG9wZW5yb3V0ZXIsIGdyb3EsIHJvdXRlcjksIGN1c3RvbSkKICBjb25zdCBib2R5ID0gewogICAgbW9kZWw6IGUubW9kZWwsCiAgICBtZXNzYWdlczogW3sgcm9sZTogInVzZXIiLCBjb250ZW50OiBmdWxsUHJvbXB0IH1dLAogICAgdGVtcGVyYXR1cmU6IDAuNywKICB9OwogIC8vIE1vZGVsIGdwdC1vc3MgR3JvcSBwYWthaSByZWFzb25pbmcgdG9rZW47IGJhdGFzaSBlZmZvcnQgYWdhciB0aWRhayBtZW1ha2FuIG1heF90b2tlbnMKICBpZiAoZS5wcm92aWRlciA9PT0gImdyb3EiICYmIGUubW9kZWwuaW5kZXhPZigiZ3B0LW9zcyIpICE9PSAtMSkgewogICAgYm9keS5yZWFzb25pbmdfZWZmb3J0ID0gImxvdyI7CiAgfQogIGNvbnN0IGhlYWRlcnMgPSB7ICJDb250ZW50LVR5cGUiOiAiYXBwbGljYXRpb24vanNvbiIgfTsKICBpZiAoZS5hcGlLZXkpIGhlYWRlcnNbIkF1dGhvcml6YXRpb24iXSA9ICJCZWFyZXIgIiArIGUuYXBpS2V5OwogIGlmIChlLmRlZi5leHRyYUhlYWRlcnMpIE9iamVjdC5hc3NpZ24oaGVhZGVycywgZS5kZWYuZXh0cmFIZWFkZXJzKCkpOwogIHJldHVybiB7CiAgICBwcm92aWRlcjogZS5wcm92aWRlciwKICAgIHVybDogZS5kZWYuY2hhdFVybChlKSwKICAgIG9wdGlvbnM6IHsgbWV0aG9kOiAiUE9TVCIsIGhlYWRlcnMsIGJvZHk6IEpTT04uc3RyaW5naWZ5KGJvZHkpIH0sCiAgfTsKfQoKLyogQW1iaWwgZGFmdGFyIG1vZGVsIHJlc21pIGRhcmkgZW5kcG9pbnQgKEdFVCB7YmFzZVVybH0vbW9kZWxzLCBzdGFuZGFyCiAqIE9wZW5BSS1jb21wYXRpYmxlKS4gRGlqYWxhbmthbiBkYXJpIGJyb3dzZXIgdXNlciBkZW5nYW4ga2V5IHVzZXIgc2VuZGlyaSwKICogamFkaSBuYW1hIG1vZGVsIHRpZGFrIHBlcmx1IGRpdGViYWstdGViYWsuICovCmFzeW5jIGZ1bmN0aW9uIHRtRmV0Y2hNb2RlbHMocmF3U2V0dGluZ3MsIGZldGNoSW1wbCkgewogIGNvbnN0IGZldGNoRm4gPSBmZXRjaEltcGwgfHwgZmV0Y2g7CiAgY29uc3QgZSA9IHRtRWZmZWN0aXZlKHJhd1NldHRpbmdzKTsKICBpZiAoZS5kZWYuZ2VtaW5pU3R5bGUpIHsKICAgIHRocm93IG5ldyBFcnJvcigiUHJvdmlkZXIgR2VtaW5pIHRpZGFrIG1lbWFrYWkgZGFmdGFyIC9tb2RlbHMgc2VwZXJ0aSBpbmkuIElzaSBuYW1hIG1vZGVsIG1hbnVhbCwgbWlzLiBnZW1pbmktMi4wLWZsYXNoLiIpOwogIH0KICBpZiAoIWUuYmFzZVVybCkgdGhyb3cgbmV3IEVycm9yKCJCYXNlIFVSTCBiZWx1bSBkaWlzaS4iKTsKICBjb25zdCB1cmwgPSBlLmJhc2VVcmwucmVwbGFjZSgvXC8rJC8sICIiKSArICIvbW9kZWxzIjsKICBjb25zdCBoZWFkZXJzID0ge307CiAgaWYgKGUuYXBpS2V5KSBoZWFkZXJzWyJBdXRob3JpemF0aW9uIl0gPSAiQmVhcmVyICIgKyBlLmFwaUtleTsKICBsZXQgcmVzOwogIHRyeSB7CiAgICByZXMgPSBhd2FpdCBmZXRjaEZuKHVybCwgeyBtZXRob2Q6ICJHRVQiLCBoZWFkZXJzIH0pOwogIH0gY2F0Y2ggKG5ldEVycikgewogICAgdGhyb3cgbmV3IEVycm9yKCJUaWRhayBiaXNhIG1lbmdodWJ1bmdpICIgKyB1cmwgKyAiICgiICsgKG5ldEVyciAmJiBuZXRFcnIubWVzc2FnZSA/IG5ldEVyci5tZXNzYWdlIDogIm5ldHdvcmsgZXJyb3IiKSArICIpLiBQZXJpa3NhIEJhc2UgVVJMIChoYXJ1cyBkaWF3YWxpIGh0dHBzOi8vKSBkYW4ga29uZWtzaSBpbnRlcm5ldC4iKTsKICB9CiAgY29uc3QgYm9keVRleHQgPSBhd2FpdCByZXMudGV4dCgpLmNhdGNoKCgpID0+ICIiKTsKICBpZiAoIXJlcy5vaykgewogICAgaWYgKHJlcy5zdGF0dXMgPT09IDQwNCkgewogICAgICB0aHJvdyBuZXcgRXJyb3IoIkRhZnRhciBtb2RlbCB0aWRhayBkaXRlbXVrYW4gKDQwNCkgZGkgIiArIHVybCArICIuIFBhc3Rpa2FuIEJhc2UgVVJMIGFkYWxhaCBhbGFtYXQgREFTQVIgQVBJIHlhbmcgYmVyYWtoaXJhbiAvdjEgKGNvbnRvaDogaHR0cHM6Ly9hcGkua2llLmFpL2FudGhyb3BpYy92MSksIGJ1a2FuIGFsYW1hdCBoYWxhbWFuIHdlYiBhdGF1IGFsYW1hdCBlbmRwb2ludCBsZW5na2FwLiIpOwogICAgfQogICAgdGhyb3cgbmV3IEVycm9yKHRtRnJpZW5kbHlFcnJvcihyZXMuc3RhdHVzLCBib2R5VGV4dCwgZSkpOwogIH0KICBsZXQganNvbiA9IG51bGw7CiAgdHJ5IHsganNvbiA9IEpTT04ucGFyc2UoYm9keVRleHQpOyB9IGNhdGNoIChqRXJyKSB7CiAgICB0aHJvdyBuZXcgRXJyb3IoIlJlc3BvbnMgZGFmdGFyIG1vZGVsIHRpZGFrIGJpc2EgZGlwYXJzZTogIiArIGJvZHlUZXh0LnNsaWNlKDAsIDIwMCkpOwogIH0KICBsZXQgaWRzID0gW107CiAgaWYgKEFycmF5LmlzQXJyYXkoanNvbi5kYXRhKSkgaWRzID0ganNvbi5kYXRhLm1hcCgobSkgPT4gKHR5cGVvZiBtID09PSAic3RyaW5nIiA/IG0gOiBtICYmIG0uaWQpKS5maWx0ZXIoQm9vbGVhbik7CiAgZWxzZSBpZiAoQXJyYXkuaXNBcnJheShqc29uLm1vZGVscykpIGlkcyA9IGpzb24ubW9kZWxzLm1hcCgobSkgPT4gKHR5cGVvZiBtID09PSAic3RyaW5nIiA/IG0gOiBtICYmIChtLmlkIHx8IG0ubmFtZSkpKS5maWx0ZXIoQm9vbGVhbik7CiAgZWxzZSBpZiAoQXJyYXkuaXNBcnJheShqc29uKSkgaWRzID0ganNvbi5tYXAoKG0pID0+ICh0eXBlb2YgbSA9PT0gInN0cmluZyIgPyBtIDogbSAmJiBtLmlkKSkuZmlsdGVyKEJvb2xlYW4pOwogIGlkcyA9IEFycmF5LmZyb20obmV3IFNldChpZHMpKS5zb3J0KCk7CiAgaWYgKCFpZHMubGVuZ3RoKSB0aHJvdyBuZXcgRXJyb3IoIkVuZHBvaW50IG1lbmphd2FiLCB0YXBpIGRhZnRhciBtb2RlbG55YSBrb3NvbmcuIFRhbnlhIGRhZnRhciBtb2RlbCBrZSBwZW55ZWRpYSBlbmRwb2ludC1ueWEsIGxhbHUgaXNpIGtvbG9tIE1vZGVsIG1hbnVhbC4iKTsKICByZXR1cm4gaWRzOwp9CgpmdW5jdGlvbiB0bVBhcnNlUmVzcG9uc2UoanNvbiwgcHJvdmlkZXIpIHsKICBpZiAocHJvdmlkZXIgPT09ICJnZW1pbmkiKSB7CiAgICBjb25zdCBjID0ganNvbiAmJiBqc29uLmNhbmRpZGF0ZXMgJiYganNvbi5jYW5kaWRhdGVzWzBdOwogICAgY29uc3QgcGFydHMgPSBjICYmIGMuY29udGVudCAmJiBjLmNvbnRlbnQucGFydHM7CiAgICBpZiAocGFydHMpIHJldHVybiBwYXJ0cy5tYXAoKHApID0+IHAudGV4dCB8fCAiIikuam9pbigiIikudHJpbSgpOwogICAgcmV0dXJuICIiOwogIH0KICBjb25zdCBjID0ganNvbiAmJiBqc29uLmNob2ljZXMgJiYganNvbi5jaG9pY2VzWzBdOwogIGNvbnN0IG1zZyA9IGMgJiYgYy5tZXNzYWdlOwogIGlmIChtc2cgJiYgbXNnLmNvbnRlbnQpIHJldHVybiBTdHJpbmcobXNnLmNvbnRlbnQpLnRyaW0oKTsKICByZXR1cm4gIiI7Cn0KCmZ1bmN0aW9uIHRtRnJpZW5kbHlFcnJvcihzdGF0dXMsIGJvZHlUZXh0LCBlZmYpIHsKICBjb25zdCBsb3dlciA9IChib2R5VGV4dCB8fCAiIikudG9Mb3dlckNhc2UoKTsKICBpZiAoc3RhdHVzID09PSA0MDEgfHwgc3RhdHVzID09PSA0MDMgfHwgbG93ZXIuaW5kZXhPZigiaW52YWxpZCBhcGkga2V5IikgIT09IC0xIHx8CiAgICAgIGxvd2VyLmluZGV4T2YoImluY29ycmVjdCBhcGkga2V5IikgIT09IC0xIHx8IGxvd2VyLmluZGV4T2YoInVuYXV0aG9yaXplZCIpICE9PSAtMSkgewogICAgcmV0dXJuICJBUEkga2V5IGRpdG9sYWsgKCIgKyBzdGF0dXMgKyAiKSBvbGVoICIgKyBlZmYubGFiZWwgKwogICAgICAiLiBQZXJpa3NhIGtlbWJhbGkga2V5LW11IGRpIFBlbmdhdHVyYW4gQUkuIEF0YXUgcGFrYWkgTW9kZSBQcm9tcHQgKGdyYXRpcykg4oCUIGhhc2lsIHByb21wdCB0ZXRhcCBiaXNhIGthbXUgamFsYW5rYW4gbWFudWFsIGRpIENoYXRHUFQvR2VtaW5pLiI7CiAgfQogIGlmIChzdGF0dXMgPT09IDQwNCB8fCBsb3dlci5pbmRleE9mKCJtb2RlbF9ub3RfZm91bmQiKSAhPT0gLTEgfHwKICAgICAgbG93ZXIuaW5kZXhPZigibW9kZWwgbm90IGZvdW5kIikgIT09IC0xIHx8IGxvd2VyLmluZGV4T2YoImRvZXMgbm90IGV4aXN0IikgIT09IC0xKSB7CiAgICByZXR1cm4gIk1vZGVsICciICsgZWZmLm1vZGVsICsgIicgdGlkYWsgZGl0ZW11a2FuIGRpICIgKyBlZmYubGFiZWwgKwogICAgICAiLiBDZWsgcGVudWxpc2FuIG5hbWEgbW9kZWwgZGkgUGVuZ2F0dXJhbiBBSSAodW50dWsgOVJvdXRlciBoYXJ1cyBzYW1hIHBlcnNpcyBkZW5nYW4gZGFzaGJvYXJkLW11KS4iOwogIH0KICBpZiAoc3RhdHVzID09PSA0MjkpIHsKICAgIHJldHVybiAiTGltaXQgcHJvdmlkZXIgdGVyY2FwYWkgKDQyOSkuIFR1bmdndSBzZWJlbnRhciBhdGF1IHBha2FpIE1vZGUgUHJvbXB0LiI7CiAgfQogIHJldHVybiAiRXJyb3IgZGFyaSAiICsgZWZmLmxhYmVsICsgIiAoSFRUUCAiICsgc3RhdHVzICsgIik6ICIgKyAoYm9keVRleHQgfHwgInRhbnBhIGRldGFpbCIpLnNsaWNlKDAsIDMwMCk7Cn0KCmFzeW5jIGZ1bmN0aW9uIHRtQWlHZW5lcmF0ZShzcGVjVGV4dCwgdG9vbExhYmVsLCByYXdTZXR0aW5ncywgZmV0Y2hJbXBsKSB7CiAgY29uc3QgZmV0Y2hGbiA9IGZldGNoSW1wbCB8fCBmZXRjaDsKICBjb25zdCBlID0gdG1FZmZlY3RpdmUocmF3U2V0dGluZ3MpOwoKICBpZiAoZS5wcm92aWRlciA9PT0gImN1c3RvbSIgJiYgIWUuYmFzZVVybCkgewogICAgdGhyb3cgbmV3IEVycm9yKCJCYXNlIFVSTCBiZWx1bSBkaWlzaS4gQnVrYSBQZW5nYXR1cmFuIEFJIGRhbiBpc2kgQmFzZSBVUkwgZW5kcG9pbnQgT3BlbkFJLWNvbXBhdGlibGUtbXUuIik7CiAgfQogIGlmIChlLnByb3ZpZGVyICE9PSAiZ2VtaW5pIiAmJiAhZS5hcGlLZXkpIHsKICAgIHRocm93IG5ldyBFcnJvcigiQVBJIGtleSBiZWx1bSBkaWlzaS4gQnVrYSBQZW5nYXR1cmFuIEFJIChpa29uIOKame+4jyksIHBpbGloIHByb3ZpZGVyLCBtYXN1a2thbiBrZXktbXUsIGxhbHUgU2ltcGFuLiBLZXkgaGFueWEgdGVyc2ltcGFuIGRpIGJyb3dzZXIgaW5pLiBBdGF1IHBha2FpIE1vZGUgUHJvbXB0IChncmF0aXMpLiIpOwogIH0KICBpZiAoZS5wcm92aWRlciA9PT0gImdlbWluaSIgJiYgIWUuYXBpS2V5KSB7CiAgICB0aHJvdyBuZXcgRXJyb3IoIkFQSSBrZXkgR2VtaW5pIGJlbHVtIGRpaXNpLiBCdWthIFBlbmdhdHVyYW4gQUkgZGFuIGlzaSBrZXkgZGFyaSBHb29nbGUgQUkgU3R1ZGlvLiIpOwogIH0KICBpZiAoIWUubW9kZWwpIHsKICAgIHRocm93IG5ldyBFcnJvcigiTmFtYSBtb2RlbCBiZWx1bSBkaWlzaSBkaSBQZW5nYXR1cmFuIEFJLiIpOwogIH0KCiAgY29uc3QgcmVxID0gdG1CdWlsZFJlcXVlc3Qoc3BlY1RleHQsIHRvb2xMYWJlbCwgZSk7CiAgbGV0IHJlczsKICB0cnkgewogICAgcmVzID0gYXdhaXQgZmV0Y2hGbihyZXEudXJsLCByZXEub3B0aW9ucyk7CiAgfSBjYXRjaCAobmV0RXJyKSB7CiAgICBsZXQgZXh0cmEgPSAiIjsKICAgIGlmIChlLnByb3ZpZGVyID09PSAicm91dGVyOSIpIHsKICAgICAgZXh0cmEgPSAiIENlayAzIGhhbDogKDEpIGFwbGlrYXNpIDlSb3V0ZXIgc2VkYW5nIGphbGFuIGRpIGtvbXB1dGVyIHlhbmcgU0FNQSBkZW5nYW4gYnJvd3NlciBpbmk7ICgyKSBCYXNlIFVSTCBoYXJ1cyBwZXJzaXMgaHR0cDovL2xvY2FsaG9zdDoyMDEyOC92MSDigJQgQlVLQU4gL2Rhc2hib2FyZCAoaXR1IGFsYW1hdCBoYWxhbWFuIHdlYiA5Um91dGVyKTsgKDMpIGJpbGEgc2l0dXMgVG9vbHMgTWFya2V0aW5nIGluaSBkaWJ1a2EgZGFyaSBhbGFtYXQgSFRUUFMgKEdpdEh1YiBQYWdlcyksIGJyb3dzZXIgbWVtYmxva2lyIHBhbmdnaWxhbiBrZSBodHRwOi8vbG9jYWxob3N0IOKAlCBzb2x1c2lueWEgYWt0aWZrYW4gVHVubmVsIGRpIGRhc2hib2FyZCA5Um91dGVyICh0b21ib2wgRW5hYmxlIGRpIGJhcmlzIFR1bm5lbCkgbGFsdSBwYWthaSBVUkwgdHVubmVsIEhUVFBTLW55YSBzZWJhZ2FpIEJhc2UgVVJMLCBhdGF1IGJ1a2EgZmlsZSBhcGxpa2FzaSBpbmkgc2VjYXJhIGxva2FsIGRpIGtvbXB1dGVyIHlhbmcgc2FtYS4iOwogICAgfQogICAgdGhyb3cgbmV3IEVycm9yKCJUaWRhayBiaXNhIG1lbmdodWJ1bmdpICIgKyBlLmxhYmVsICsgIiAoIiArIChuZXRFcnIgJiYgbmV0RXJyLm1lc3NhZ2UgPyBuZXRFcnIubWVzc2FnZSA6ICJuZXR3b3JrIGVycm9yIikgKyAiKS4iICsgZXh0cmEpOwogIH0KCiAgbGV0IGJvZHlUZXh0ID0gIiI7CiAgdHJ5IHsgYm9keVRleHQgPSBhd2FpdCByZXMudGV4dCgpOyB9IGNhdGNoICh0RXJyKSB7IC8qIGFiYWlrYW4gKi8gfQogIGlmICghcmVzLm9rKSB0aHJvdyBuZXcgRXJyb3IodG1GcmllbmRseUVycm9yKHJlcy5zdGF0dXMsIGJvZHlUZXh0LCBlKSk7CgogIGxldCBqc29uID0gbnVsbDsKICB0cnkgeyBqc29uID0gSlNPTi5wYXJzZShib2R5VGV4dCk7IH0gY2F0Y2ggKGpFcnIpIHsKICAgIHRocm93IG5ldyBFcnJvcigiUmVzcG9ucyAiICsgZS5sYWJlbCArICIgdGlkYWsgYmlzYSBkaXBhcnNlOiAiICsgYm9keVRleHQuc2xpY2UoMCwgMjAwKSk7CiAgfQogIGNvbnN0IG91dCA9IHRtUGFyc2VSZXNwb25zZShqc29uLCBlLnByb3ZpZGVyKTsKICBpZiAoIW91dCkgdGhyb3cgbmV3IEVycm9yKGUubGFiZWwgKyAiIG1lbmdlbWJhbGlrYW4gcmVzcG9ucyBrb3NvbmcuIENvYmEgbGFnaSBhdGF1IHBha2FpIE1vZGUgUHJvbXB0LiIpOwogIHJldHVybiBvdXQ7Cn0K
+/* Tools Marketing — AI BYOK layer
+ * Setiap visitor memasukkan API key-nya sendiri. Key disimpan HANYA di
+ * browser-nya (localStorage), tidak pernah di kode/repo/server manapun. */
+
+const TM_AI_KEY = "tm_ai_settings";
+
+const PROVIDERS = {
+  openai: {
+    label: "OpenAI",
+    defaultModel: "gpt-4o-mini",
+    defaultBase: "https://api.openai.com/v1",
+    chatUrl: (s) => s.baseUrl.replace(/\/+$/, "") + "/chat/completions",
+    openaiStyle: true,
+    hint: "Contoh model: gpt-4o-mini, gpt-4o.",
+  },
+  openrouter: {
+    label: "OpenRouter",
+    defaultModel: "meta-llama/llama-3.3-70b-instruct",
+    defaultBase: "https://openrouter.ai/api/v1",
+    chatUrl: (s) => s.baseUrl.replace(/\/+$/, "") + "/chat/completions",
+    openaiStyle: true,
+    extraHeaders: () => ({
+      "HTTP-Referer": location.origin,
+      "X-Title": "Tools Marketing",
+    }),
+    hint: "Cari model gratis di openrouter.ai/models lalu tulis ID-nya di sini.",
+  },
+  groq: {
+    label: "Groq",
+    defaultModel: "openai/gpt-oss-120b",
+    defaultBase: "https://api.groq.com/openai/v1",
+    chatUrl: (s) => s.baseUrl.replace(/\/+$/, "") + "/chat/completions",
+    openaiStyle: true,
+    // Model lama Groq (llama-3.3-70b-versatile, llama-3.1-8b-instant) dinonaktifkan
+    // untuk free/developer tier sejak 16 Agu 2026. Default resmi penggantinya:
+    altModels: ["openai/gpt-oss-120b", "openai/gpt-oss-20b", "qwen/qwen3-32b"],
+    hint: "Default resmi Groq: openai/gpt-oss-120b / gpt-oss-20b / qwen/qwen3-32b. Model llama-3.3/3.1 lama sudah dinonaktifkan untuk free tier.",
+  },
+  gemini: {
+    label: "Google Gemini",
+    defaultModel: "gemini-2.0-flash",
+    defaultBase: "https://generativelanguage.googleapis.com/v1beta",
+    geminiStyle: true,
+    hint: "Contoh model: gemini-2.0-flash, gemini-1.5-flash. Key diambil dari Google AI Studio.",
+  },
+  kie: {
+    label: "Kie AI",
+    defaultModel: "gemini-3-flash",
+    defaultBase: "https://api.kie.ai",
+    kieStyle: true,
+    hint: "Key diambil dari kie.ai/api-key. Nama model otomatis dimasukkan ke jalur URL oleh aplikasi (tidak perlu ditulis di alamat). Klik '🔄 Ambil daftar model dari endpoint' untuk melihat model chat yang tersedia, lalu pilih satu. CATATAN: model keluarga Claude TIDAK bisa dipakai di jalur ini (format protokolnya berbeda — Anthropic Messages); pilih model Gemini atau model chat lainnya.",
+  },
+  router9: {
+    label: "9Router (lokal)",
+    defaultModel: "kr/claude-sonnet-4.5",
+    defaultBase: "http://localhost:20128/v1",
+    chatUrl: (s) => s.baseUrl.replace(/\/+$/, "") + "/chat/completions",
+    openaiStyle: true,
+    hint: "Model harus SAMA PERSIS dengan yang ada di dashboard 9Router-mu (mis. kr/claude-sonnet-4.5 atau nama combo). 9Router harus jalan di komputer yang SAMA dengan browser ini; kalau situs dibuka via HTTPS, pakai URL tunnel HTTPS (Cloudflare/Tailscale) sebagai Base URL. Jika panggilan langsung ke http://localhost:20128/v1 selalu gagal 'Failed to fetch' (masalah CORS 9Router), jalankan 'node server.js' di folder aplikasi, buka http://localhost:8090, dan isi Base URL dengan http://localhost:8090/proxy9/v1.",
+  },
+  custom: {
+    label: "Custom (OpenAI-compatible)",
+    defaultModel: "",
+    defaultBase: "",
+    chatUrl: (s) => s.baseUrl.replace(/\/+$/, "") + "/chat/completions",
+    openaiStyle: true,
+    hint: "Isi Base URL endpoint OpenAI-compatible-mu + nama model yang tersedia di sana.",
+  },
+};
+
+function tmLoadSettings() {
+  try {
+    const raw = localStorage.getItem(TM_AI_KEY);
+    if (raw) return Object.assign(
+      { provider: "groq", model: "", baseUrl: "", apiKey: "" },
+      JSON.parse(raw)
+    );
+  } catch (e) { /* abaikan */ }
+  return { provider: "groq", model: "", baseUrl: "", apiKey: "" };
+}
+
+function tmSaveSettings(s) {
+  localStorage.setItem(TM_AI_KEY, JSON.stringify(s));
+}
+
+function tmNormalizeBaseUrl(raw, providerKey) {
+  let u = (raw || "").trim().replace(/\/+$/, "");
+  if (!u) return u;
+  // Kesalahan umum: skema http(s):// lupa ditulis (mis. "tamandata.cloud/v1").
+  // Tanpa skema, browser menganggapnya alamat relatif dan request pasti gagal.
+  if (!/^https?:\/\//i.test(u)) {
+    u = (/^(localhost|127\.)/i.test(u) ? "http://" : "https://") + u;
+  }
+  // Kesalahan umum: user menyalin URL dari address bar dashboard 9Router
+  // (http://localhost:20128/dashboard) — itu halaman web, BUKAN endpoint API.
+  u = u.replace(/\/dashboard$/i, "").replace(/\/login$/i, "").replace(/\/+$/, "");
+  // Kesalahan umum lain: user menempel alamat LENGKAP daftar model
+  // (berakhiran /models) sebagai Base URL — Base URL adalah alamat dasarnya saja.
+  u = u.replace(/\/models$/i, "").replace(/\/+$/, "");
+  // Untuk 9Router, endpoint API selalu berakhiran /v1
+  if (providerKey === "router9" && /^https?:\/\/[^\/]+$/.test(u)) {
+    u += "/v1";
+  }
+  return u;
+}
+
+function tmEffective(settings) {
+  const p = PROVIDERS[settings.provider] || PROVIDERS.groq;
+  return {
+    provider: settings.provider,
+    label: p.label,
+    model: (settings.model || "").trim() || p.defaultModel,
+    baseUrl: tmNormalizeBaseUrl((settings.baseUrl || "").trim() || p.defaultBase, settings.provider),
+    apiKey: (settings.apiKey || "").trim(),
+    def: p,
+  };
+}
+
+/* Kie AI menempatkan nama model di JALUR URL, bukan di body request:
+ * POST https://api.kie.ai/{model}/v1/chat/completions */
+function tmKieRoot(baseUrl) {
+  return (baseUrl || "").replace(/\/+$/, "").replace(/\/(api\/v1|v1)$/i, "");
+}
+
+/* Instruksi pembungkus: AI diminta menghasilkan HASIL AKHIR, bukan prompt. */
+function tmWrapSpec(specText, toolLabel) {
+  return (
+    "Kamu adalah asisten pemasaran berbahasa Indonesia.\n" +
+    "Tugasmu: menghasilkan HASIL AKHIR untuk tool '" + toolLabel + "', " +
+    "mengikuti spesifikasi di bawah ini persis. " +
+    "Tulis LANGSUNG hasil akhirnya dalam Bahasa Indonesia yang natural dan siap pakai. " +
+    "Jangan mengulang atau menampilkan spesifikasi/prompt-nya, jangan memberi prolog seperti " +
+    "'Berikut hasilnya' — langsung ke isi.\n\n" +
+    "=== SPESIFIKASI ===\n" + specText
+  );
+}
+
+function tmBuildRequest(specText, toolLabel, settings) {
+  const e = tmEffective(settings);
+  const fullPrompt = tmWrapSpec(specText, toolLabel);
+
+  if (e.provider === "kie") {
+    // Kie: nama model di jalur URL (mis. https://api.kie.ai/gemini-3-flash/v1/chat/completions),
+    // tidak ada di body. Format request/response gaya OpenAI (messages / choices).
+    const url = tmKieRoot(e.baseUrl) + "/" + encodeURIComponent(e.model) + "/v1/chat/completions";
+    const headers = { "Content-Type": "application/json" };
+    if (e.apiKey) headers["Authorization"] = "Bearer " + e.apiKey;
+    return {
+      provider: "kie",
+      url,
+      options: {
+        method: "POST",
+        headers,
+        body: JSON.stringify({
+          messages: [{ role: "user", content: fullPrompt }],
+          temperature: 0.7,
+        }),
+      },
+    };
+  }
+
+  if (e.provider === "gemini") {
+    const url =
+      e.baseUrl.replace(/\/+$/, "") +
+      "/models/" + encodeURIComponent(e.model) +
+      ":generateContent?key=" + encodeURIComponent(e.apiKey);
+    return {
+      provider: "gemini",
+      url,
+      options: {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          contents: [{ parts: [{ text: fullPrompt }] }],
+          generationConfig: { temperature: 0.7 },
+        }),
+      },
+    };
+  }
+
+  // OpenAI-style (openai, openrouter, groq, router9, custom)
+  const body = {
+    model: e.model,
+    messages: [{ role: "user", content: fullPrompt }],
+    temperature: 0.7,
+  };
+  // Model gpt-oss Groq pakai reasoning token; batasi effort agar tidak memakan max_tokens
+  if (e.provider === "groq" && e.model.indexOf("gpt-oss") !== -1) {
+    body.reasoning_effort = "low";
+  }
+  const headers = { "Content-Type": "application/json" };
+  if (e.apiKey) headers["Authorization"] = "Bearer " + e.apiKey;
+  if (e.def.extraHeaders) Object.assign(headers, e.def.extraHeaders());
+  return {
+    provider: e.provider,
+    url: e.def.chatUrl(e),
+    options: { method: "POST", headers, body: JSON.stringify(body) },
+  };
+}
+
+/* Ambil daftar model resmi dari endpoint (GET {baseUrl}/models, standar
+ * OpenAI-compatible). Dijalankan dari browser user dengan key user sendiri,
+ * jadi nama model tidak perlu ditebak-tebak. */
+async function tmFetchModels(rawSettings, fetchImpl) {
+  const fetchFn = fetchImpl || fetch;
+  const e = tmEffective(rawSettings);
+  if (e.def.geminiStyle) {
+    throw new Error("Provider Gemini tidak memakai daftar /models seperti ini. Isi nama model manual, mis. gemini-2.0-flash.");
+  }
+  if (!e.baseUrl) throw new Error("Base URL belum diisi.");
+  // Kie: katalog model ada di https://api.kie.ai/api/v1/models (bukan di jalur per-model)
+  const isKie = e.provider === "kie";
+  const url = isKie
+    ? tmKieRoot(e.baseUrl) + "/api/v1/models"
+    : e.baseUrl.replace(/\/+$/, "") + "/models";
+  const headers = {};
+  if (e.apiKey) headers["Authorization"] = "Bearer " + e.apiKey;
+  let res;
+  try {
+    res = await fetchFn(url, { method: "GET", headers });
+  } catch (netErr) {
+    throw new Error("Tidak bisa menghubungi " + url + " (" + (netErr && netErr.message ? netErr.message : "network error") + "). Periksa Base URL (harus diawali https://) dan koneksi internet.");
+  }
+  const bodyText = await res.text().catch(() => "");
+  if (!res.ok) {
+    if (res.status === 404) {
+      throw new Error(isKie
+        ? "Daftar model tidak ditemukan (404) di " + url + ". Untuk provider Kie AI daftar diambil dari " + tmKieRoot(e.baseUrl) + "/api/v1/models — pastikan koneksi internet dan API key-mu valid."
+        : "Daftar model tidak ditemukan (404) di " + url + ". Pastikan Base URL adalah alamat DASAR API yang berakhiran /v1 (contoh: https://api.kie.ai/anthropic/v1), bukan alamat halaman web atau alamat endpoint lengkap.");
+    }
+    throw new Error(tmFriendlyError(res.status, bodyText, e));
+  }
+  let json = null;
+  try { json = JSON.parse(bodyText); } catch (jErr) {
+    throw new Error("Respons daftar model tidak bisa diparse: " + bodyText.slice(0, 200));
+  }
+  let items = [];
+  if (Array.isArray(json.data)) items = json.data;
+  else if (Array.isArray(json.models)) items = json.models;
+  else if (Array.isArray(json)) items = json;
+  // Kie: katalog besar bercampur model gambar/video/chat — ambil hanya
+  // yang taskType-nya mencakup "Chat" (kalau info taskType tersedia).
+  if (isKie && items.some((m) => m && Array.isArray(m.taskType))) {
+    items = items.filter((m) =>
+      !m || !Array.isArray(m.taskType) ||
+      m.taskType.some((t) => String(t).toLowerCase() === "chat")
+    );
+  }
+  let ids = items
+    .map((m) => (typeof m === "string" ? m : m && (m.id || m.model || m.name)))
+    .filter(Boolean);
+  ids = Array.from(new Set(ids)).sort();
+  if (!ids.length) throw new Error("Endpoint menjawab, tapi daftar modelnya kosong. Tanya daftar model ke penyedia endpoint-nya, lalu isi kolom Model manual.");
+  return ids;
+}
+
+function tmParseResponse(json, provider) {
+  if (provider === "gemini") {
+    const c = json && json.candidates && json.candidates[0];
+    const parts = c && c.content && c.content.parts;
+    if (parts) return parts.map((p) => p.text || "").join("").trim();
+    return "";
+  }
+  const c = json && json.choices && json.choices[0];
+  const msg = c && c.message;
+  if (msg && msg.content) return String(msg.content).trim();
+  return "";
+}
+
+function tmFriendlyError(status, bodyText, eff) {
+  const lower = (bodyText || "").toLowerCase();
+  if (status === 401 || status === 403 || lower.indexOf("invalid api key") !== -1 ||
+      lower.indexOf("incorrect api key") !== -1 || lower.indexOf("unauthorized") !== -1) {
+    return "API key ditolak (" + status + ") oleh " + eff.label +
+      ". Periksa kembali key-mu di Pengaturan AI. Atau pakai Mode Prompt (gratis) — hasil prompt tetap bisa kamu jalankan manual di ChatGPT/Gemini.";
+  }
+  if (status === 404 || lower.indexOf("model_not_found") !== -1 ||
+      lower.indexOf("model not found") !== -1 || lower.indexOf("does not exist") !== -1) {
+    return "Model '" + eff.model + "' tidak ditemukan di " + eff.label +
+      ". Cek penulisan nama model di Pengaturan AI (untuk 9Router harus sama persis dengan dashboard-mu).";
+  }
+  if (status === 429) {
+    return "Limit provider tercapai (429). Tunggu sebentar atau pakai Mode Prompt.";
+  }
+  return "Error dari " + eff.label + " (HTTP " + status + "): " + (bodyText || "tanpa detail").slice(0, 300);
+}
+
+async function tmAiGenerate(specText, toolLabel, rawSettings, fetchImpl) {
+  const fetchFn = fetchImpl || fetch;
+  const e = tmEffective(rawSettings);
+
+  if (e.provider === "custom" && !e.baseUrl) {
+    throw new Error("Base URL belum diisi. Buka Pengaturan AI dan isi Base URL endpoint OpenAI-compatible-mu.");
+  }
+  if (e.provider !== "gemini" && !e.apiKey) {
+    throw new Error("API key belum diisi. Buka Pengaturan AI (ikon ⚙️), pilih provider, masukkan key-mu, lalu Simpan. Key hanya tersimpan di browser ini. Atau pakai Mode Prompt (gratis).");
+  }
+  if (e.provider === "gemini" && !e.apiKey) {
+    throw new Error("API key Gemini belum diisi. Buka Pengaturan AI dan isi key dari Google AI Studio.");
+  }
+  if (!e.model) {
+    throw new Error("Nama model belum diisi di Pengaturan AI.");
+  }
+
+  const req = tmBuildRequest(specText, toolLabel, e);
+  let res;
+  try {
+    res = await fetchFn(req.url, req.options);
+  } catch (netErr) {
+    let extra = "";
+    if (e.provider === "router9") {
+      extra = " Cek 3 hal: (1) aplikasi 9Router sedang jalan di komputer yang SAMA dengan browser ini; (2) Base URL harus persis http://localhost:20128/v1 — BUKAN /dashboard (itu alamat halaman web 9Router); (3) bila situs Tools Marketing ini dibuka dari alamat HTTPS (GitHub Pages), browser memblokir panggilan ke http://localhost — solusinya aktifkan Tunnel di dashboard 9Router (tombol Enable di baris Tunnel) lalu pakai URL tunnel HTTPS-nya sebagai Base URL, atau buka file aplikasi ini secara lokal di komputer yang sama.";
+    }
+    throw new Error("Tidak bisa menghubungi " + e.label + " (" + (netErr && netErr.message ? netErr.message : "network error") + ")." + extra);
+  }
+
+  let bodyText = "";
+  try { bodyText = await res.text(); } catch (tErr) { /* abaikan */ }
+  if (!res.ok) throw new Error(tmFriendlyError(res.status, bodyText, e));
+
+  let json = null;
+  try { json = JSON.parse(bodyText); } catch (jErr) {
+    throw new Error("Respons " + e.label + " tidak bisa diparse: " + bodyText.slice(0, 200));
+  }
+  const out = tmParseResponse(json, e.provider);
+  // Kie kadang menjawab HTTP 200 dengan badan error, mis. {"code":422,"msg":"The model is not supported"}
+  if (!out && json && typeof json.code === "number" && json.code !== 200) {
+    const msg = json.msg || json.message || "";
+    throw new Error(e.label + " menjawab code " + json.code + (msg ? ": " + msg : "") + ". Coba model lain atau pakai Mode Prompt.");
+  }
+  if (!out) throw new Error(e.label + " mengembalikan respons kosong. Coba lagi atau pakai Mode Prompt.");
+  return out;
+}
