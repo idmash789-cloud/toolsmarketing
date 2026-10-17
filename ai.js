@@ -166,6 +166,7 @@ function tmBuildRequest(specText, toolLabel, settings) {
         body: JSON.stringify({
           messages: [{ role: "user", content: fullPrompt }],
           temperature: 0.7,
+          stream: false,
         }),
       },
     };
@@ -195,6 +196,7 @@ function tmBuildRequest(specText, toolLabel, settings) {
     model: e.model,
     messages: [{ role: "user", content: fullPrompt }],
     temperature: 0.7,
+    stream: false, // minta jawaban utuh, bukan streaming (9Router tetap kadang streaming — ditangani tmSseToJson)
   };
   // Model gpt-oss Groq pakai reasoning token; batasi effort agar tidak memakan max_tokens
   if (e.provider === "groq" && e.model.indexOf("gpt-oss") !== -1) {
@@ -321,6 +323,32 @@ function tmFriendlyError(status, bodyText, eff) {
   return "Error dari " + eff.label + " (HTTP " + status + "): " + (bodyText || "tanpa detail").slice(0, 300);
 }
 
+/* Beberapa endpoint (terutama 9Router untuk model Antigravity) menjawab
+ * STREAMING (SSE "data: {...}") walau tidak diminta. Rangkai potongan
+ * delta.content-nya menjadi satu respons utuh agar bisa dibaca seperti biasa. */
+function tmSseToJson(text){
+  if (!text || text.indexOf("data:") === -1) return null;
+  let content = "";
+  let saw = false;
+  text.split(/\r?\n/).forEach((line) => {
+    const t = line.trim();
+    if (t.indexOf("data:") !== 0) return;
+    const payload = t.slice(5).trim();
+    if (!payload || payload === "[DONE]") return;
+    try {
+      const j = JSON.parse(payload);
+      const ch = j && j.choices && j.choices[0];
+      if (!ch) return;
+      saw = true;
+      if (ch.delta && typeof ch.delta.content === "string") content += ch.delta.content;
+      else if (ch.message && typeof ch.message.content === "string") content += ch.message.content;
+      else if (typeof ch.text === "string") content += ch.text;
+    } catch (e) { /* potongan rusak -> lewati */ }
+  });
+  if (!saw) return null;
+  return { choices: [{ message: { content } }] };
+}
+
 async function tmAiGenerate(specText, toolLabel, rawSettings, fetchImpl) {
   const fetchFn = fetchImpl || fetch;
   const e = tmEffective(rawSettings);
@@ -356,7 +384,8 @@ async function tmAiGenerate(specText, toolLabel, rawSettings, fetchImpl) {
 
   let json = null;
   try { json = JSON.parse(bodyText); } catch (jErr) {
-    throw new Error("Respons " + e.label + " tidak bisa diparse: " + bodyText.slice(0, 200));
+    json = tmSseToJson(bodyText); // mungkin jawaban streaming (SSE) — rangkai dulu
+    if (!json) throw new Error("Respons " + e.label + " tidak bisa diparse: " + bodyText.slice(0, 200));
   }
   const out = tmParseResponse(json, e.provider);
   // Kie kadang menjawab HTTP 200 dengan badan error, mis. {"code":422,"msg":"The model is not supported"}
