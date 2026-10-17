@@ -800,6 +800,10 @@ function syncProviderUI(){
   $("provider-note").textContent = def.hint;
   $("wrap-baseurl").style.display = (p === "custom" || p === "router9") ? "" : "none";
   if (!$("set-baseurl").value && p === "router9") $("set-baseurl").value = def.defaultBase;
+  /* Daftar model hasil ambilan provider SEBELUMNYA tidak boleh ikut tampil —
+   * menyesatkan (mis. model Kie terlihat saat provider diganti ke 9Router). */
+  const wl = $("wrap-model-list"); if (wl) wl.style.display = "none";
+  const mst = $("models-status"); if (mst) mst.textContent = "";
 }
 async function onFetchModels(){
   const btn = $("btn-fetch-models");

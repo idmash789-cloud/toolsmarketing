@@ -234,6 +234,9 @@ async function tmFetchModels(rawSettings, fetchImpl) {
   try {
     res = await fetchFn(url, { method: "GET", headers });
   } catch (netErr) {
+    if (e.provider === "router9") {
+      throw new Error("Tidak bisa menghubungi 9Router dari browser (Failed to fetch) — ini batasan CORS 9Router untuk panggilan langsung dari browser (persis masalah Generate kemarin), bukan salah isian. Untuk 9Router daftar model TIDAK perlu diambil lewat tombol ini: isi kolom Model manual persis seperti nama di dashboard 9Router (default kr/claude-sonnet-4.5). Kalau mau daftar model + Generate langsung dari browser, jalankan aplikasi lewat server.js (Base URL http://localhost:8090/proxy9/v1), atau matikan 'Require API key' di 9Router lalu coba lagi.");
+    }
     throw new Error("Tidak bisa menghubungi " + url + " (" + (netErr && netErr.message ? netErr.message : "network error") + "). Periksa Base URL (harus diawali https://) dan koneksi internet.");
   }
   const bodyText = await res.text().catch(() => "");
