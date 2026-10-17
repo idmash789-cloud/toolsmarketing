@@ -255,6 +255,8 @@ async function tmFetchModels(rawSettings, fetchImpl) {
   }
   let items = [];
   if (Array.isArray(json.data)) items = json.data;
+  else if (json.data && Array.isArray(json.data.models)) items = json.data.models; // Kie: { data: { models: [...] } }
+  else if (json.data && Array.isArray(json.data.data)) items = json.data.data;
   else if (Array.isArray(json.models)) items = json.models;
   else if (Array.isArray(json)) items = json;
   // Kie: katalog besar bercampur model gambar/video/chat — ambil hanya
