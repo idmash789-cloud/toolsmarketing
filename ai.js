@@ -222,6 +222,9 @@ async function tmFetchModels(rawSettings, fetchImpl) {
   if (!e.baseUrl) throw new Error("Base URL belum diisi.");
   // Kie: katalog model ada di https://api.kie.ai/api/v1/models (bukan di jalur per-model)
   const isKie = e.provider === "kie";
+  if (isKie && !e.apiKey) {
+    throw new Error("API key Kie AI belum diisi. Isi dulu kolom API Key di panel ini (key dari kie.ai/api-key), lalu klik Ambil daftar model lagi — tanpa key, Kie menjawab kosong.");
+  }
   const url = isKie
     ? tmKieRoot(e.baseUrl) + "/api/v1/models"
     : e.baseUrl.replace(/\/+$/, "") + "/models";
@@ -246,20 +249,36 @@ async function tmFetchModels(rawSettings, fetchImpl) {
   try { json = JSON.parse(bodyText); } catch (jErr) {
     throw new Error("Respons daftar model tidak bisa diparse: " + bodyText.slice(0, 200));
   }
+  // Sebagian endpoint (termasuk Kie) menjawab HTTP 200 tapi error di body: {"code":401,...}
+  if (json && typeof json.code === "number" && json.code !== 200) {
+    throw new Error(e.label + " menjawab code " + json.code + ": " + (json.msg || json.message || "error dari endpoint") + " — periksa kembali API key-mu.");
+  }
   let items = [];
   if (Array.isArray(json.data)) items = json.data;
   else if (Array.isArray(json.models)) items = json.models;
   else if (Array.isArray(json)) items = json;
   // Kie: katalog besar bercampur model gambar/video/chat — ambil hanya
-  // yang taskType-nya mencakup "Chat" (kalau info taskType tersedia).
-  if (isKie && items.some((m) => m && Array.isArray(m.taskType))) {
-    items = items.filter((m) =>
-      !m || !Array.isArray(m.taskType) ||
-      m.taskType.some((t) => String(t).toLowerCase() === "chat")
-    );
+  // model chat, dari sinyal apa pun yang tersedia (taskType array/string,
+  // type, category). Item tanpa sinyal apa pun tetap disimpan.
+  if (isKie) {
+    const signals = (m) => {
+      if (!m || typeof m !== "object") return null;
+      const out = [];
+      if (Array.isArray(m.taskType)) out.push.apply(out, m.taskType.map((t) => String(t).toLowerCase()));
+      if (typeof m.taskType === "string") out.push(m.taskType.toLowerCase());
+      if (typeof m.type === "string") out.push(m.type.toLowerCase());
+      if (typeof m.category === "string") out.push(m.category.toLowerCase());
+      return out.length ? out : null;
+    };
+    if (items.some((m) => signals(m))) {
+      items = items.filter((m) => {
+        const s = signals(m);
+        return !s || s.some((t) => t.indexOf("chat") !== -1 || t === "llm" || t === "language" || t === "text");
+      });
+    }
   }
   let ids = items
-    .map((m) => (typeof m === "string" ? m : m && (m.id || m.model || m.name)))
+    .map((m) => (typeof m === "string" ? m : m && (m.id || m.model || m.name || m.modelId || m.slug)))
     .filter(Boolean);
   ids = Array.from(new Set(ids)).sort();
   if (!ids.length) throw new Error("Endpoint menjawab, tapi daftar modelnya kosong. Tanya daftar model ke penyedia endpoint-nya, lalu isi kolom Model manual.");
