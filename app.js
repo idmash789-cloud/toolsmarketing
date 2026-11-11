@@ -277,18 +277,65 @@ function renderDashboard(){
   $("view-tool").classList.add("hidden");
   const grid = $("tool-cards");
   grid.innerHTML = "";
-  const stages = {persona:["01","AUDIENCE INTELLIGENCE"],vpc:["02","VALUE STRATEGY"],copywriting:["03","AD CREATIVE"],narasi:["04","CONTENT PRODUCTION"]};
+
+  // Presentation metadata only; tool definitions, forms and prompt generation remain unchanged.
+  const design = {
+    persona: {
+      number: "01", category: "AUDIENCE INTELLIGENCE",
+      benefit: "Bantu iklan lebih relevan, tepat sasaran, dan efisien.",
+      features: [["♙","Demografi"],["◎","Masalah & Keinginan"],["◇","Angle Iklan"]],
+      focus: "Riset Audiens", output: "Profil & Segmen Audiens"
+    },
+    vpc: {
+      number: "02", category: "VALUE STRATEGY",
+      benefit: "Perjelas nilai unik produk dan alasan kuat untuk membeli.",
+      features: [["◇","Fitur & Benefit"],["♡","Emosi & Kebutuhan"],["◎","Kekhawatiran"]],
+      focus: "Value Proposition", output: "Peta Nilai Produk"
+    },
+    copywriting: {
+      number: "03", category: "AD CREATIVE",
+      benefit: "Bangun pesan iklan persuasif yang siap dikembangkan dan diuji.",
+      features: [["✎","Headline"],["▤","Primary Text"],["↗","CTA & Variasi"]],
+      focus: "Copy Iklan", output: "Headline, Teks & CTA"
+    },
+    narasi: {
+      number: "04", category: "CONTENT PRODUCTION",
+      benefit: "Ubah strategi menjadi narasi visual yang runtut dan menarik.",
+      features: [["▣","Hook & Alur"],["◉","Naskah VO"],["▧","Saran Visual"]],
+      focus: "Skrip Video", output: "Naskah & Panduan Konten"
+    }
+  };
+
   TOOLS.forEach(t => {
-    const stage = stages[t.id] || ["—","CREATIVE TOOL"];
+    const d = design[t.id];
+    if (!d) return;
     const card = document.createElement("button");
     card.type = "button";
-    card.className = "tool-card";
-    card.setAttribute("aria-label", "Buka " + t.title);
-    card.innerHTML = '<div class="card-top"><span class="tool-number">' + stage[0] +
-      ' / 04</span><span class="card-icon" aria-hidden="true">' + t.emoji +
-      '</span></div><div class="card-body"><div class="tool-category">' + stage[1] +
-      '</div><h3>' + t.title + '</h3><p>' + t.desc +
-      '</p></div><div class="card-footer"><span>BUKA WORKSPACE</span><span class="card-arrow" aria-hidden="true">↗</span></div>';
+    card.className = "tool-card tool-card--" + t.id;
+    card.setAttribute("aria-label", "Buka tool " + t.title);
+    const chips = d.features.map(([symbol, label]) =>
+      '<span class="card-chip"><span aria-hidden="true">' + symbol + '</span>' + label + '</span>'
+    ).join("");
+
+    card.innerHTML =
+      '<div class="card-top">' +
+        '<div class="card-top-left"><span class="tool-number">' + d.number + ' / 04</span>' +
+          '<span class="card-progress" aria-hidden="true"><i></i><i></i><i></i></span></div>' +
+        '<span class="card-icon" aria-hidden="true">' + t.emoji + '</span>' +
+      '</div>' +
+      '<div class="card-body">' +
+        '<div class="tool-category">' + d.category + '</div>' +
+        '<h3>' + t.title + '</h3>' +
+        '<p class="card-desc">' + t.desc + '</p>' +
+        '<div class="card-benefit"><span class="benefit-check" aria-hidden="true">✓</span>' + d.benefit + '</div>' +
+        '<div class="card-chips">' + chips + '</div>' +
+      '</div>' +
+      '<div class="card-footer">' +
+        '<div class="card-meta"><span class="meta-item"><span class="meta-symbol" aria-hidden="true">◇</span>' + d.focus + '</span>' +
+          '<span class="meta-item"><span class="meta-symbol" aria-hidden="true">▤</span>Output: ' + d.output + '</span></div>' +
+        '<span class="card-open">BUKA WORKSPACE <span class="card-arrow" aria-hidden="true">↗</span></span>' +
+      '</div>';
+
     card.addEventListener("click", () => openTool(t.id));
     grid.appendChild(card);
   });
