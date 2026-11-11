@@ -61,7 +61,7 @@ function validEmail(email) {
 function credentialsPresent(env) {
   return Boolean(env.SHEET_ID && env.GOOGLE_CLIENT_EMAIL &&
     env.GOOGLE_PRIVATE_KEY && env.SESSION_SECRET &&
-    env.ADMIN_SETUP_TOKEN && env.SITE_ORIGIN);
+    env.ADMIN_SETUP_TOKEN && env.OWNER_EMAIL && env.SITE_ORIGIN);
 }
 async function safeJson(request) {
   const len = Number(request.headers.get("content-length") || 0);
@@ -203,7 +203,7 @@ async function authenticatedUser(env,request) {
   if (!session) return null;
   const user=(await listUsers(env)).find(row => row.email === session.em);
   if (!user || !user.hash || await passwordVersion(user.hash) !== session.pv) return null;
-  return {name:user.name,email:user.email};
+  return {name:user.name,email:user.email,isOwner:user.email===cleanEmail(env.OWNER_EMAIL)};
 }
 async function adminAuthorized(env,request) {
   if (!env.ADMIN_SETUP_TOKEN || env.ADMIN_SETUP_TOKEN.length < 32) return false;
@@ -226,7 +226,7 @@ async function main(request,env) {
   if (path === "/api/health" && request.method === "GET")
     return respond(env,request,{ok:true,configured:credentialsPresent(env)});
   if (!credentialsPresent(env) || env.SESSION_SECRET.length < 32)
-    return respond(env,request,{message:"Sistem login belum dikonfigurasi oleh admin."},503);
+    return respond(env,request,{message:"Sistem login belum dikonfigurasi."},503);
 
   if (path === "/api/login" && request.method === "POST") {
     if (!browserOriginAllowed(request,env))
@@ -245,7 +245,7 @@ async function main(request,env) {
     if (!user || !(await passwordMatches(password,user.hash)))
       return respond(env,request,{message:"Email atau password salah."},401);
     const token=await signSession(env,{name:user.name,email:user.email,pv:await passwordVersion(user.hash)});
-    return respond(env,request,{ok:true,user:{name:user.name,email:user.email}},200,
+    return respond(env,request,{ok:true,user:{name:user.name,email:user.email,isOwner:user.email===cleanEmail(env.OWNER_EMAIL)}},200,
       {"Set-Cookie":sessionCookie(token,SESSION_TTL)});
   }
 
@@ -261,27 +261,58 @@ async function main(request,env) {
     return respond(env,request,{ok:true},200,{"Set-Cookie":sessionCookie("",0)});
   }
 
-  if ((path === "/api/admin/users" || path === "/api/admin/reset-password") &&
-      request.method === "POST") {
-    if (!(await adminAuthorized(env,request)))
+  /* Bootstrap first owner through server-side secret, not through public registration. */
+  if(path==="/api/setup/owner" && request.method==="POST"){
+    if(!(await adminAuthorized(env,request)))
       return respond(env,request,{message:"Unauthorized"},401);
-    let body;
-    try {body=await safeJson(request);}catch{return respond(env,request,{message:"Invalid JSON"},400);}
-    const email=cleanEmail(body.email),password=body.password;
-    if (!validEmail(email) || typeof password!=="string" || password.length<12 || password.length>128)
-      return respond(env,request,{message:"Email valid dan password 12–128 karakter diperlukan."},400);
+    const ownerEmail=cleanEmail(env.OWNER_EMAIL);
+    if(!validEmail(ownerEmail))return respond(env,request,{message:"OWNER_EMAIL invalid."},503);
     const users=await listUsers(env);
-    const existing=users.find(u=>u.email===email);
-    if (path === "/api/admin/users") {
-      const name=String(body.name||"").trim();
-      if (name.length<2 || name.length>80) return respond(env,request,{message:"Nama harus 2–80 karakter."},400);
-      if (existing) return respond(env,request,{message:"Email sudah terdaftar."},409);
-      await appendUser(env,name,email,await passwordHash(password));
-      return respond(env,request,{ok:true,message:"Pengguna ditambahkan.",user:{name,email}},201);
+    if(users.some(u=>u.email===ownerEmail))
+      return respond(env,request,{message:"Akun pemilik sudah tersedia."},409);
+    let form;try{form=await safeJson(request);}catch{return respond(env,request,{message:"Data tidak valid."},400);}
+    const name=typeof form.name==="string"?form.name.trim():"",password=form.password;
+    if(name.length<2||name.length>80||typeof password!=="string"||password.length<12||password.length>128)
+      return respond(env,request,{message:"Nama 2–80 karakter dan password 12–128 karakter diperlukan."},400);
+    await appendUser(env,name,ownerEmail,await passwordHash(password));
+    return respond(env,request,{ok:true,message:"Akun pemilik berhasil dibuat."},201);
+  }
+
+  /* All user management routes require valid owner session.
+     Knowing the static confirmation page's URL does not authorize access. */
+  if(path.startsWith("/api/admin/")){
+    if(request.method!=="GET"&&request.method!=="POST")return respond(env,request,{message:"Method not allowed"},405);
+    if(!browserOriginAllowed(request,env))return respond(env,request,{message:"Origin tidak diizinkan."},403);
+    const owner=await authenticatedUser(env,request);
+    if(!owner)return respond(env,request,{message:"Silakan login terlebih dahulu."},401);
+    if(!owner.isOwner)return respond(env,request,{message:"Hanya pemilik yang boleh mengelola pengguna."},403);
+    if(path==="/api/admin/users"&&request.method==="GET"){
+      const users=(await listUsers(env)).map(row=>({
+        name:row.name,email:row.email,isOwner:row.email===cleanEmail(env.OWNER_EMAIL)
+      }));
+      return respond(env,request,{users,count:users.length});
     }
-    if (!existing) return respond(env,request,{message:"Pengguna tidak ditemukan."},404);
-    await overwritePassword(env,existing.row,await passwordHash(password));
-    return respond(env,request,{ok:true,message:"Password diganti. Sesi lama akan berakhir."});
+    if((path==="/api/admin/users"||path==="/api/admin/reset-password")&&request.method==="POST"){
+      let form;try{form=await safeJson(request);}catch{return respond(env,request,{message:"Data tidak valid."},400);}
+      const email=cleanEmail(form.email),password=form.password;
+      if(!validEmail(email)||typeof password!=="string"||password.length<12||password.length>128)
+        return respond(env,request,{message:"Email valid dan password 12–128 karakter diperlukan."},400);
+      const users=await listUsers(env),existing=users.find(row=>row.email===email);
+      if(path==="/api/admin/users"){
+        const name=typeof form.name==="string"?form.name.trim():"";
+        if(name.length<2||name.length>80)return respond(env,request,{message:"Nama harus 2–80 karakter."},400);
+        if(email===cleanEmail(env.OWNER_EMAIL))return respond(env,request,{message:"Email khusus pemilik tidak bisa ditambahkan di form."},403);
+        if(existing)return respond(env,request,{message:"Email sudah terdaftar."},409);
+        await appendUser(env,name,email,await passwordHash(password));
+        return respond(env,request,{ok:true,message:"Pengguna berhasil disimpan ke Google Sheets.",user:{name,email}},201);
+      }
+      if(!existing)return respond(env,request,{message:"Pengguna tidak ditemukan."},404);
+      if(email===cleanEmail(env.OWNER_EMAIL))
+        return respond(env,request,{message:"Password pemilik tidak dapat diganti lewat endpoint ini."},403);
+      await overwritePassword(env,existing.row,await passwordHash(password));
+      return respond(env,request,{ok:true,message:"Password anggota diperbarui."});
+    }
+    return respond(env,request,{message:"Not found"},404);
   }
   return respond(env,request,{message:"Not found"},404);
 }
