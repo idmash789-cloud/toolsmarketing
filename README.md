@@ -25,3 +25,20 @@ HTML/CSS/JavaScript murni; tanpa build step. Form, hasil, dan riwayat input bera
 ## Menjalankan
 
 Buka `index.html` di browser atau deploy ke GitHub Pages/hosting statis. File `CNAME` digunakan untuk domain kustom.
+
+
+## Member Login Premium (Google Sheets)
+
+Halaman `login.html` telah disiapkan dengan desain dark-gold premium.
+Database akun menggunakan Google Sheets dengan tepat **3 kolom: Nama, Email,
+Password**. Password disimpan sebagai salted PBKDF2 hash, bukan teks biasa.
+
+Backend Cloudflare Worker ada di `cloudflare-auth/`. **Untuk saat ini login
+masih mode setup/preview** (`auth-config.js`: `enabled: false`) agar tools
+online tidak terkunci sebelum Google Sheets dan Worker tersedia. Panduan lengkap:
+[SETUP-AUTH.md](SETUP-AUTH.md).
+
+Login yang benar memerlukan backend aktif, Google Sheets private, pengaturan
+secrets Cloudflare, dan pembuatan akun pertama via endpoint admin. Guard pada
+frontend GitHub Pages adalah navigasi saja; untuk memproteksi aset statis
+sepenuhnya perlu middleware server-side / hosting di Cloudflare.
