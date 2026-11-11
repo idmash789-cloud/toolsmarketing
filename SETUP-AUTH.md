@@ -1,37 +1,28 @@
-# Premium Login + Google Sheets (3 kolom)
+# Tools Marketing — Login & Halaman Konfirmasi Pengguna
 
-## Status saat commit ini
-Halaman login premium tersedia pada `/login.html`. `auth-config.js` diset ke
-`enabled: false` agar website yang sudah online **tidak terkunci** sebelum backend siap.
-Membuat file/kode di GitHub **tidak otomatis** membuat Google Spreadsheet, service
-account, Worker, atau koneksi live. Semua langkah berikut harus dilakukan oleh pemilik.
+## Alamat halaman
 
-## Isi spreadsheet — tepat 3 kolom
+- Website utama: https://toolsmarketing.techo.web.id/
+- Login anggota: https://toolsmarketing.techo.web.id/login.html
+- Portal pemilik: https://toolsmarketing.techo.web.id/konfirmasi.html
 
-Buat spreadsheet Google **private** dengan tab bernama `Users`:
+Login tidak menyediakan pendaftaran publik. Hanya pemilik dapat membuat akun melalui halaman konfirmasi. Backend Cloudflare Worker memeriksa sesi dan identitas pemilik pada setiap request daftar/tambah pengguna.
 
-| A (Nama) | B (Email) | C (Password) |
-|---|---|---|
-| Nama pengguna | user@email.com | pbkdf2$... |
+## Google Sheets — persis 3 kolom
 
-Baris 1 harus `Nama, Email, Password`.
-**Kolom C bukan password teks biasa**, melainkan hash salted PBKDF2-SHA256.
-Jangan menulis password asli langsung ke spreadsheet. Gunakan endpoint admin
-di bawah untuk mendaftarkan pengguna (otomatis menambah A:B:C).
-Jangan publikasi/share spreadsheet "Anyone with the link".
+Buat Google Spreadsheet **private** dengan nama tab `Users` dan header:
 
-## Koneksi Google Cloud
+`Nama | Email | Password`
 
-1. Buat Google Cloud project dan aktifkan **Google Sheets API**.
-2. Buat **Service Account** khusus project ini.
-3. Buat JSON service-account key dan simpan **di perangkat admin saja**.
-   Jangan unggah file JSON tersebut ke GitHub/ChatGPT.
-4. Share spreadsheet ke `client_email` service account sebagai **Editor**.
-5. Salin spreadsheet ID dari URL Google Sheets: bagian setelah `/d/` sebelum `/edit`.
+Kolom Password harus berisi **hash PBKDF2**, bukan password asli. Ketika pemilik menambahkan akun melalui `/konfirmasi.html`, Worker yang melakukan hashing dan menulis satu baris ke Google Sheets. Jangan bagikan sheet sebagai publik.
 
-## Deploy Cloudflare Worker
+## Persiapan koneksi
 
-Di terminal (Node.js terinstal):
+1. Di Google Cloud aktifkan Google Sheets API dan buat **Service Account**.
+2. Simpan file JSON kredensial service account hanya di komputer Anda, bukan di GitHub atau chat.
+3. Bagikan spreadsheet dengan akses **Editor** kepada alamat `client_email` pada service account.
+4. Catat Spreadsheet ID (di URL sheet, sesudah `/d/`).
+5. Deploy Worker di folder `cloudflare-auth` dan atur secrets:
 
 ```bash
 cd cloudflare-auth
@@ -41,76 +32,51 @@ npx wrangler secret put GOOGLE_CLIENT_EMAIL
 npx wrangler secret put GOOGLE_PRIVATE_KEY
 npx wrangler secret put SESSION_SECRET
 npx wrangler secret put ADMIN_SETUP_TOKEN
+npx wrangler secret put OWNER_EMAIL
 npx wrangler deploy
 ```
 
-- `GOOGLE_PRIVATE_KEY`: isi `private_key` dari JSON service account (PEM).
-- `SESSION_SECRET`: string acak >=32 karakter (gunakan nilai unik).
-- `ADMIN_SETUP_TOKEN`: string acak >=32 karakter, berbeda dari session secret.
-- Masukkan secrets di prompt terminal, **bukan** di GitHub commit atau browser.
-- Worker menggunakan PBKDF2 untuk hash password dan signed HttpOnly cookie.
-- Rate limiting login 6 percobaan/menit per IP via Cloudflare binding.
-- Worker memvalidasi session dan status akun terhadap Google Sheets.
+`OWNER_EMAIL`: email pribadi yang akan Anda gunakan untuk login sebagai pemilik.
+`SESSION_SECRET` dan `ADMIN_SETUP_TOKEN`: dua string acak berbeda, masing-masing minimal 32 karakter.
+`GOOGLE_PRIVATE_KEY`: isi field `private_key` dari JSON service account. Secrets **tidak boleh** masuk ke `auth-config.js`, repositori, atau Google Sheets.
 
-Pada Cloudflare, buka **Workers & Pages → toolsmarketing-auth → Settings →
-Domains & Routes → Add → Custom Domain**:
-`api.toolsmarketing.techo.web.id`.
+6. Di Cloudflare Workers & Pages, tambah **Custom Domain** Worker: `api.toolsmarketing.techo.web.id`. Pastikan HTTPS aktif. API ini berbeda dari host situs `toolsmarketing.techo.web.id`, tetapi masih berada di site yang sama untuk cookie `SameSite=Lax`.
 
-Zona domain `techo.web.id` harus berada di Cloudflare yang Anda kelola.
-Jangan mengganti CNAME website `toolsmarketing.techo.web.id` untuk ini.
-Pastikan domain API memiliki HTTPS valid. Worker dan website berada di subdomain
-dari domain yang sama agar cookie `SameSite=Lax` dapat digunakan.
+## Membuat akun pemilik pertama
 
-## Tambahkan akun pertama
+Setelah Worker dan spreadsheet siap, buat akun pemilik satu kali melalui request rahasia (bukan form publik).
 
-Jangan isi kolom Password manual dengan plaintext. Buat akun lewat API
-**admin** (misalnya dengan PowerShell di Windows):
+Contoh di PowerShell Windows:
 
 ```powershell
 $Api = "https://api.toolsmarketing.techo.web.id"
-$AdminToken = Read-Host "Tempel ADMIN_SETUP_TOKEN"
-$Password = Read-Host "Password akun (minimal 12 karakter)" -AsSecureString
-$PasswordText = [System.Net.NetworkCredential]::new("", $Password).Password
-$Body = @{ name = "Admin Tools"; email = "admin@contoh.com"; password = $PasswordText } | ConvertTo-Json
-Invoke-RestMethod -Method Post -Uri "$Api/api/admin/users" `
-  -Headers @{ Authorization = "Bearer $AdminToken" } `
-  -ContentType "application/json" -Body $Body
-Remove-Variable Body, PasswordText, AdminToken, Password
+$Token = Read-Host "Masukkan ADMIN_SETUP_TOKEN"
+$Nama = Read-Host "Nama akun pemilik"
+$Password = Read-Host "Password akun pemilik (12+ karakter)" -AsSecureString
+$Plain = [System.Net.NetworkCredential]::new("", $Password).Password
+$Body = @{name=$Nama; password=$Plain} | ConvertTo-Json
+Invoke-RestMethod -Method POST -Uri "$Api/api/setup/owner" -Headers @{Authorization="Bearer $Token"} -ContentType "application/json" -Body $Body
+Remove-Variable Token, Password, Plain, Body
 ```
 
-Ganti `admin@contoh.com` dengan email yang ingin didaftarkan.
-API menambah baris baru ke Google Sheets: Nama, Email, dan hash Password.
-Tidak ada fitur registrasi publik; semua akun dibuat admin.
+Email pemilik diambil dari secret `OWNER_EMAIL`, tidak dikirim dari browser. Endpoint ini menolak pembuatan ulang jika akun pemilik sudah tercatat di spreadsheet.
 
-Untuk mengganti password akun yang sudah ada, gunakan request admin serupa
-ke `/api/admin/reset-password` dengan JSON `email` dan `password`.
-Setelah reset, sesi lama tidak lolos validasi lagi.
+## Mengaktifkan halaman
 
-## Aktifkan autentikasi website
+Saat ini `auth-config.js` sengaja memakai `enabled:false` agar website tidak langsung terkunci. Setelah akun pemilik dan Worker siap:
 
-1. Kunjungi `https://api.toolsmarketing.techo.web.id/api/health`
-   dan pastikan `{"ok":true,"configured":true}`.
-2. Uji login di `https://toolsmarketing.techo.web.id/login.html`.
-3. Setelah berhasil, ubah `auth-config.js` menjadi `enabled: true`.
-4. Deploy perubahan GitHub seperti biasanya.
+1. Periksa `https://api.toolsmarketing.techo.web.id/api/health` mengembalikan `configured:true`.
+2. Ubah `enabled:false` menjadi `enabled:true` di `auth-config.js` dan deploy.
+3. Buka `/login.html`, masuk memakai akun pemilik.
+4. Buka `/konfirmasi.html`, isi **Nama, Email, Password**, klik **Konfirmasi & Simpan Pengguna**.
+5. Baris baru muncul otomatis di tab `Users`. Akun anggota tersebut bisa login melalui `/login.html`.
 
-Penting: karena situs di GitHub Pages adalah situs statis publik, **guard
-JavaScript bukan pembatas akses yang kuat**. User yang paham teknis masih dapat
-mengunduh file HTML/JS publik walaupun login diterapkan. Jika tujuan Anda
-adalah mengunci akses ke tools secara nyata, migrasikan hosting static assets
-ke Cloudflare Workers/Pages dengan middleware yang memverifikasi sesi **di
-server sebelum mengirimkan file**. Jangan menyebutnya paywall aman sampai itu
-terpasang. Sistem Worker di sini mengamankan credential, password hash,
-API spreadsheet dan session, tetapi tidak membuat file GitHub Pages privat.
+Halaman `/konfirmasi.html` adalah file statis, sehingga sumber HTML-nya masih publik, namun hanya pemilik dengan sesi valid yang dapat memuat daftar akun atau melakukan penulisan ke spreadsheet. URL tersembunyi saja **bukan** pengamanan. Jika ingin menyembunyikan seluruh berkas/tools sampai login, hosting perlu middleware autentikasi server-side (Cloudflare Workers/Pages), bukan hanya JavaScript browser.
 
-## Diagnostik
+## Catatan
 
-- Login gagal / status 503: secrets atau rate limiter belum ada.
-- Gagal baca sheet: cek Google Sheets API aktif, nama tab Users dan izin Editor
-  untuk service account.
-- Browser CORS: pastikan `SITE_ORIGIN` tepat dengan URL website HTTPS dan API
-  memakai custom domain yang benar.
-- Cookie tidak tersimpan: hindari API `workers.dev` lintas-site untuk produksi.
-- Jika spreadsheet diubah secara manual, kolom Password wajib tetap hash.
-- Jangan masukkan spreadsheet data/credential ke file statis `app.js`,
-  `login.js`, atau `auth-config.js`.
+- Form login publik tidak memiliki tautan daftar.
+- Password tidak disimpan dalam bentuk teks asli.
+- Worker menolak percobaan login berulang dengan rate limit 6/menit per IP.
+- Jika pengguna mencoba `/api/admin/users` tanpa sesi owner, mendapat HTTP 401 atau 403.
+- Jangan mengubah password hash di Sheet secara manual.
