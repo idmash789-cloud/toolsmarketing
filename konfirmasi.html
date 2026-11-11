@@ -1,19 +1,73 @@
-<!DOCTYPE html><html lang="id"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow,noarchive"><meta name="theme-color" content="#080b10"><title>Konfirmasi Pengguna — Tools Marketing Studio</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet"><link rel="stylesheet" href="konfirmasi.css"><script src="auth-config.js"></script></head>
-<body><div class="layout">
-<aside class="sidebar"><a href="index.html" class="brand"><span class="mark">✦</span><span><b>TOOLS<span>MARKETING</span></b><small>PRIVATE MANAGEMENT</small></span></a>
-<nav><small>OWNER CONSOLE</small><div class="active">▣ &nbsp; Konfirmasi Pengguna</div><a href="index.html">◇ &nbsp; Workspace Marketing</a></nav>
-<div class="owner-caption"><span class="owner-icon">✦</span><span><strong>OWNER ACCESS</strong><small>Restricted management</small></span></div></aside>
-<main class="content"><header class="topbar"><span><i class="online-dot"></i> PRIVATE OWNER CONSOLE <span class="slash">/</span> ACCESS CONTROL</span><div class="links"><a href="index.html">↗ Ke Workspace</a><button id="logout-btn" type="button" hidden>Keluar</button></div></header>
-<section id="loading" class="gate"><div class="gate-symbol">✦</div><h1>Memverifikasi akses…</h1><p>Hanya pemilik Tools Marketing yang dapat mengelola akun pengguna.</p></section>
-<section id="blocked" class="gate" hidden><div class="gate-symbol">◇</div><h1>Akses tidak tersedia</h1><p id="blocked-message">Akun atau koneksi database belum terverifikasi.</p><a href="login.html" class="gate-link">Masuk ke akun ↗</a></section>
-<div id="owner-dashboard" hidden>
-<div class="welcome"><div><p class="eyebrow">01 / USER MANAGEMENT</p><h1>Konfirmasi <em>Pengguna.</em></h1><p>Kelola akses anggota ke workspace dari dashboard premium pribadi.</p></div><div class="seal"><strong>✦</strong><small>OWNER ONLY</small></div></div>
-<section class="stats" aria-label="Ringkasan akun"><div><small>REGISTERED ACCOUNTS</small><strong id="total-users">—</strong><p>Total akun pada spreadsheet</p></div><div><small>MEMBER ACCESS</small><strong id="total-members">—</strong><p>Akun anggota selain pemilik</p></div><div><small>AUTHENTICATION</small><strong class="state">ACTIVE <span>●</span></strong><p>Verifikasi akses pemilik</p></div></section>
-<div class="dashboard-grid">
-<section class="panel"><div class="panel-title"><p class="eyebrow">02 / ADD ACCOUNT</p><h2>Tambah Pengguna</h2><p>Isi tiga kolom berikut, lalu simpan akun baru langsung ke Google Sheets.</p></div>
-<form id="new-user" novalidate><div class="field"><label for="name">Nama Lengkap</label><input id="name" type="text" autocomplete="off" placeholder="Nama lengkap pengguna" minlength="2" maxlength="80" required></div><div class="field"><label for="email">Alamat Email</label><input id="email" type="email" autocomplete="off" placeholder="nama@email.com" maxlength="254" required></div><div class="field"><label for="password">Password</label><div class="password-field"><input id="password" type="password" autocomplete="new-password" placeholder="Minimal 12 karakter" minlength="12" maxlength="128" required><button id="show-password" type="button">Lihat</button></div><small>Password akan disimpan sebagai hash, bukan teks asli.</small></div>
-<button id="save-user" type="submit" class="primary">Konfirmasi & Simpan Pengguna <span>↗</span></button><p id="form-status" class="feedback" role="status" aria-live="polite" hidden></p></form></section>
-<section class="panel list-panel"><div class="panel-title list-header"><div><p class="eyebrow">03 / ACCOUNT DIRECTORY</p><h2>Daftar Pengguna</h2><p>Data yang tersimpan di spreadsheet.</p></div><button id="refresh" type="button" class="refresh">↻ Refresh</button></div>
-<div class="table-wrap"><table><thead><tr><th>NAMA</th><th>EMAIL</th><th>AKSES</th></tr></thead><tbody id="user-rows"><tr><td colspan="3" class="empty">Memuat data…</td></tr></tbody></table></div><footer class="table-footer"><span><i class="online-dot"></i> PRIVATE SHEET CONNECTION</span><span>Nama · Email · Password</span></footer>
-</section></div><footer class="footer"><span>© 2026 Tools Marketing Studio</span><span>PRIVATE MANAGEMENT / OWNER ONLY</span></footer></div>
-</main></div><script src="konfirmasi.js"></script></body></html>
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#080b10">
+  <meta name="description" content="Buat akun Tools Marketing Studio dengan nama, email, dan password di browser ini.">
+  <title>Aktivasi Akun — Tools Marketing Studio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="login.css">
+</head>
+<body>
+<div class="login-shell">
+  <section class="login-story" aria-label="Tentang Tools Marketing Studio">
+    <header class="story-header">
+      <a href="index.html" class="brand" aria-label="Tools Marketing Studio, beranda">
+        <span class="brand-icon" aria-hidden="true">✦</span>
+        <span class="brand-name"><strong>TOOLS<span>MARKETING</span></strong><small>THE CREATIVE WORKSPACE</small></span>
+      </a>
+      <span class="edition">STUDIO / 2026</span>
+    </header>
+    <div class="story-main">
+      <div class="eyebrow"><span class="live-dot"></span> YOUR PRIVATE WORKSPACE <span class="slash">/</span> ACCESS 01</div>
+      <h1>Lebih dari<br>sekadar tools.<br><em>Ini ruang kreasimu.</em></h1>
+      <p>Mulai dari memahami audiens, merumuskan nilai produk, hingga menyusun naskah iklan — dalam satu ruang kerja eksklusif yang dirancang untuk marketer.</p>
+      <div class="feature-list">
+        <div><span class="feature-mark">01</span><span><strong>Marketing Intelligence</strong><small>Strategi yang dimulai dari insight</small></span><span class="feature-arrow">↗</span></div>
+        <div><span class="feature-mark">02</span><span><strong>Creative Production</strong><small>Ide menjadi materi iklan yang terarah</small></span><span class="feature-arrow">↗</span></div>
+        <div><span class="feature-mark">03</span><span><strong>Personal Workspace</strong><small>Alur kerja sederhana, fokus pada hasil</small></span><span class="feature-arrow">↗</span></div>
+      </div>
+    </div>
+    <div class="story-bottom">
+      <div class="insight-art" aria-hidden="true"><div class="circle c-one"></div><div class="circle c-two"></div><div class="circle c-three"></div><span>✦</span></div>
+      <div class="story-footnote"><span>THINK CLEARLY.</span><strong>CREATE BOLDLY.</strong></div>
+      <span class="story-copyright">© 2026 TOOLS MARKETING</span>
+    </div>
+  </section>
+
+  <main class="login-area">
+    <div class="login-top"><span class="member-label"><span class="member-dot"></span> ACCOUNT ACTIVATION</span><a href="index.html" class="back-home">↖ Kembali ke Website</a></div>
+    <div class="login-box">
+      <div class="form-emblem" aria-hidden="true">✦</div>
+      <div class="auth-intro" id="login-intro"><span class="form-eyebrow">CREATE YOUR ACCOUNT</span><h2>Aktifkan akses.<br><em>Mulai berkarya.</em></h2><p class="form-description">Lengkapi tiga data berikut untuk mengaktifkan akun premium kamu.</p></div>
+      <form id="register-form" novalidate>
+        <div class="form-group">
+          <label for="register-name">Nama Lengkap</label>
+          <div class="input-shell"><span class="input-icon" aria-hidden="true">♙</span><input id="register-name" name="name" type="text" autocomplete="name" placeholder="Nama lengkap kamu" minlength="2" maxlength="80" required></div>
+        </div>
+        <div class="form-group">
+          <label for="register-email">Alamat Email</label>
+          <div class="input-shell"><span class="input-icon" aria-hidden="true">✉</span><input id="register-email" name="email" type="email" autocomplete="email" inputmode="email" placeholder="nama@email.com" maxlength="254" required></div>
+        </div>
+        <div class="form-group">
+          <label for="register-password">Buat Password</label>
+          <div class="input-shell"><span class="input-icon" aria-hidden="true">⛨</span><input id="register-password" name="password" type="password" autocomplete="new-password" placeholder="Minimal 8 karakter" minlength="8" maxlength="128" required><button type="button" id="toggle-register-password" class="reveal-btn" aria-label="Tampilkan password" aria-pressed="false">Lihat</button></div>
+          <p class="register-help">Akun tersimpan di browser ini. Gunakan browser yang sama untuk login.</p>
+        </div>
+        <div class="form-options"><span class="secure-note">◈ Personal workspace</span><span class="private-note">AKTIVASI MEMBER</span></div>
+        <button class="submit-btn" id="register-submit" type="submit"><span>Buat Akun Saya</span><span aria-hidden="true">↗</span></button>
+        <div role="status" aria-live="polite" id="register-status" class="login-status" hidden></div>
+      </form>
+      <div class="login-divider"><span>YOUR PREMIUM WORKSPACE</span></div>
+      <p class="help-text">Sudah punya akun? <a class="confirm-login-link" href="login.html">Masuk di sini</a></p>
+    </div>
+    <footer class="login-footer"><span>© 2026 Tools Marketing Studio</span><span>PREMIUM ACCOUNT ACTIVATION</span></footer>
+  </main>
+</div>
+<script src="local-auth.js"></script>
+<script src="konfirmasi.js"></script>
+</body>
+</html>
