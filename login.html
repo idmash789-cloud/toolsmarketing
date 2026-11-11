@@ -42,7 +42,7 @@
     <div class="login-top"><span class="member-label"><span class="member-dot"></span> MEMBER ACCESS</span><a href="index.html" class="back-home">↖ Kembali ke Website</a></div>
     <div class="login-box">
       <div class="form-emblem" aria-hidden="true">✦</div>
-      <div class="auth-intro" id="login-intro"><span class="form-eyebrow">WELCOME BACK</span><h2>Selamat datang<br><em>kembali.</em></h2><p class="form-description">Masuk dengan email dan password yang diberikan pengelola workspace.</p></div>
+      <div class="auth-intro" id="login-intro"><span class="form-eyebrow">WELCOME BACK</span><h2>Selamat datang<br><em>kembali.</em></h2><p class="form-description">Masuk menggunakan akun yang telah kamu aktifkan di browser ini.</p></div>
       <form id="login-form" novalidate>
         <div class="form-group">
           <label for="login-email">Alamat Email</label>
@@ -50,20 +50,19 @@
         </div>
         <div class="form-group">
           <label for="login-password">Password</label>
-          <div class="input-shell"><span class="input-icon" aria-hidden="true">⛨</span><input id="login-password" name="password" type="password" autocomplete="current-password" placeholder="Masukkan password" required minlength="12"><button type="button" id="toggle-password" class="reveal-btn" aria-label="Tampilkan password" aria-pressed="false">Lihat</button></div>
+          <div class="input-shell"><span class="input-icon" aria-hidden="true">⛨</span><input id="login-password" name="password" type="password" autocomplete="current-password" placeholder="Masukkan password" required minlength="8"><button type="button" id="toggle-password" class="reveal-btn" aria-label="Tampilkan password" aria-pressed="false">Lihat</button></div>
         </div>
-        <div class="form-options"><span class="secure-note">◈ Akses akun terenkripsi</span><span class="private-note">KHUSUS MEMBER</span></div>
+        <div class="form-options"><span class="secure-note">◈ Akses akun terdaftar</span><span class="private-note">KHUSUS MEMBER</span></div>
         <button class="submit-btn" id="login-submit" type="submit"><span>Masuk ke Workspace</span><span aria-hidden="true">↗</span></button>
         <div role="status" aria-live="polite" id="login-status" class="login-status" hidden></div>
       </form>
       <div class="login-divider"><span>MEMBER-ONLY WORKSPACE</span></div>
-      <p class="help-text">Belum punya akun? <strong>Hubungi pengelola workspace</strong> untuk mendapatkan akses.</p>
-      <p class="configuration-note" id="configuration-note" hidden>Login akan aktif setelah Google Sheets dan Cloudflare Worker dikonfigurasi.</p>
-    </div>
+      <p class="help-text">Belum punya akun? <strong>Hubungi penjual</strong> untuk mendapatkan tautan aktivasi.</p>
+</div>
     <footer class="login-footer"><span>© 2026 Tools Marketing Studio</span><span>SECURE MEMBER PORTAL</span></footer>
   </main>
 </div>
-<script src="auth-config.js"></script>
+<script src="local-auth.js"></script>
 <script src="login.js"></script>
 </body>
 </html>
