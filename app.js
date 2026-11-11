@@ -251,14 +251,10 @@ const TOOLS = [
 ];
 
 /* ---------- STATE & UTIL ---------- */
-const TM_MODE_KEY = "tm_mode";
 let currentTool = null;
 let formValues = {};
 let lastOutput = "";
-
 function $(id){ return document.getElementById(id); }
-function getMode(){ return localStorage.getItem(TM_MODE_KEY) || "prompt"; }
-function setMode(m){ localStorage.setItem(TM_MODE_KEY, m); renderMode(); }
 
 function toast(msg, kind){
   const t = $("toast");
@@ -270,23 +266,10 @@ function toast(msg, kind){
 }
 
 function renderMode(){
-  const m = getMode();
-  $("mode-prompt").classList.toggle("active", m === "prompt");
-  $("mode-ai").classList.toggle("active", m === "ai");
-  const note = $("mode-note");
-  if (note) {
-    note.innerHTML = m === "prompt"
-      ? "🆓 <b>Mode Prompt aktif:</b> hasil generate berupa <i>prompt</i> detail siap ditempel ke ChatGPT / Gemini / AI favoritmu. Gratis, tanpa API key."
-      : "🤖 <b>Mode AI aktif:</b> hasil generate langsung berupa <i>hasil akhir</i> dari LLM pilihanmu (BYOK). Atur provider & API key lewat ikon ⚙️ di atas.";
-  }
   const btn = $("btn-generate");
-  if (btn && !btn.disabled) updateGenerateLabel();
+  if (btn) btn.textContent = "Generate Prompt";
 }
-
-function updateGenerateLabel(){
-  const btn = $("btn-generate");
-  btn.textContent = getMode() === "prompt" ? "Generate Prompt" : "Generate dengan AI";
-}
+function updateGenerateLabel(){ $("btn-generate").textContent = "Generate Prompt"; }
 
 /* ---------- DASHBOARD ---------- */
 function renderDashboard(){
@@ -294,11 +277,18 @@ function renderDashboard(){
   $("view-tool").classList.add("hidden");
   const grid = $("tool-cards");
   grid.innerHTML = "";
+  const stages = {persona:["01","AUDIENCE INTELLIGENCE"],vpc:["02","VALUE STRATEGY"],copywriting:["03","AD CREATIVE"],narasi:["04","CONTENT PRODUCTION"]};
   TOOLS.forEach(t => {
-    const card = document.createElement("div");
+    const stage = stages[t.id] || ["—","CREATIVE TOOL"];
+    const card = document.createElement("button");
+    card.type = "button";
     card.className = "tool-card";
-    card.innerHTML = '<div class="emoji">' + t.emoji + '</div><h3>' + t.title +
-      '</h3><p>' + t.desc + '</p><span class="open">Buka Tool →</span>';
+    card.setAttribute("aria-label", "Buka " + t.title);
+    card.innerHTML = '<div class="card-top"><span class="tool-number">' + stage[0] +
+      ' / 04</span><span class="card-icon" aria-hidden="true">' + t.emoji +
+      '</span></div><div class="card-body"><div class="tool-category">' + stage[1] +
+      '</div><h3>' + t.title + '</h3><p>' + t.desc +
+      '</p></div><div class="card-footer"><span>BUKA WORKSPACE</span><span class="card-arrow" aria-hidden="true">↗</span></div>';
     card.addEventListener("click", () => openTool(t.id));
     grid.appendChild(card);
   });
@@ -315,7 +305,7 @@ function openTool(id){
   $("tool-title").textContent = currentTool.emoji + " " + currentTool.title;
   $("tool-desc").textContent = currentTool.desc;
   $("output-box").innerHTML = '<p class="placeholder">Isi form di kiri, lalu tekan <b>Generate</b>.</p>';
-  $("btn-copy").disabled = true;
+  $("btn-gemini").disabled = true;
   $("btn-chatgpt").disabled = true;
   renderForm();
   renderMode();
@@ -480,39 +470,14 @@ function collectInputs(){
   return out;
 }
 
-async function onGenerate(){
+function onGenerate(){
   const inputs = collectInputs();
-  /* Simpan isian ke riwayat agar bisa dipakai ulang di semua tool. */
   tmHistSaveToolInputs(currentTool, inputs);
-  const specText = currentTool.build(inputs);
-  const mode = getMode();
-  const box = $("output-box"), load = $("loading-box");
-  box.classList.add("hidden"); load.classList.remove("hidden");
-  $("loading-text").textContent = mode === "prompt" ? "Menyusun prompt…" : "Menghubungi AI…";
-  $("btn-generate").disabled = true;
-
-  try {
-    if (mode === "prompt") {
-      await new Promise(r => setTimeout(r, 250)); // biar spinner sempat terlihat
-      showOutput(specText);
-    } else {
-      const settings = tmLoadSettings();
-      const result = await tmAiGenerate(specText, currentTool.label, settings);
-      showOutput(result);
-    }
-    // simpan chaining untuk Persona & VPC
-    if (currentTool.saveKey) {
-      try {
-        localStorage.setItem(currentTool.saveKey, JSON.stringify({
-          inputs, text: lastOutput, mode, at: Date.now(),
-        }));
-      } catch (e) {}
-    }
-  } catch (err) {
-    box.classList.remove("hidden"); load.classList.add("hidden");
-    toast("⚠️ " + err.message, "err");
-  } finally {
-    validate();
+  const prompt = currentTool.build(inputs);
+  showOutput(prompt);
+  if (currentTool.saveKey) {
+    try { localStorage.setItem(currentTool.saveKey, JSON.stringify({inputs,text:lastOutput,mode:"prompt",at:Date.now()})); }
+    catch(e){ /* storage may be unavailable */ }
   }
 }
 
@@ -751,101 +716,41 @@ function showOutput(text){
   box.textContent = text;
   box.classList.remove("hidden");
   $("loading-box").classList.add("hidden");
-  $("btn-copy").disabled = false;
   $("btn-chatgpt").disabled = false;
+  $("btn-gemini").disabled = false;
   box.scrollTop = 0;
 }
 
-function onCopy(){
-  if (!lastOutput) return;
-  const done = () => toast("Disalin ke clipboard ✔", "ok");
-  if (navigator.clipboard && navigator.clipboard.writeText) {
-    navigator.clipboard.writeText(lastOutput).then(done, () => fallbackCopy(done));
-  } else fallbackCopy(done);
+/* Prompt is copied as a reliable fallback before sending the visitor to an AI service. */
+function copyPrompt(){
+  if (!lastOutput) return Promise.resolve(false);
+  if (navigator.clipboard && navigator.clipboard.writeText){
+    return navigator.clipboard.writeText(lastOutput).then(() => true).catch(fallbackCopy);
+  }
+  return Promise.resolve(fallbackCopy());
 }
-function fallbackCopy(done){
-  const ta = document.createElement("textarea");
-  ta.value = lastOutput;
-  document.body.appendChild(ta); ta.select();
-  try { document.execCommand("copy"); done(); }
-  catch (e) { toast("Gagal menyalin otomatis — blok teksnya manual ya.", "err"); }
-  document.body.removeChild(ta);
-}
-/* URL ChatGPT dengan teks hasil sudah terisi di kolom chat-nya
- * (parameter ?q= resmi dipakai ChatGPT untuk prefill). */
-function tmChatGptUrl(text){
-  return "https://chatgpt.com/?q=" + encodeURIComponent(text || "");
+function fallbackCopy(){
+  const el = document.createElement("textarea");
+  el.value = lastOutput;
+  el.style.position = "fixed"; el.style.left = "-9999px";
+  document.body.appendChild(el); el.select();
+  let ok = false;
+  try { ok = document.execCommand("copy"); } catch(e){}
+  el.remove();
+  return ok;
 }
 function onOpenChatGPT(){
   if (!lastOutput) return;
-  window.open(tmChatGptUrl(lastOutput), "_blank", "noopener");
-  toast("Membuka ChatGPT — teks hasil sudah terisi di sana ✔", "ok");
+  // ChatGPT supports prefill with ?q=. Very long URLs can be rejected by browsers.
+  const url = lastOutput.length < 5500 ? "https://chatgpt.com/?q=" + encodeURIComponent(lastOutput) : "https://chatgpt.com/";
+  window.open(url, "_blank", "noopener,noreferrer");
+  copyPrompt().then(ok => toast(ok ? "ChatGPT dibuka. Prompt juga disalin sebagai cadangan." : "ChatGPT dibuka. Jika prompt belum tampil, salin teks hasil secara manual.", ok ? "ok" : ""));
 }
-
-/* ---------- SETTINGS MODAL ---------- */
-function openSettings(){
-  const s = tmLoadSettings();
-  $("set-provider").value = s.provider;
-  syncProviderUI();
-  $("set-model").value = s.model;
-  $("set-baseurl").value = s.baseUrl;
-  $("set-apikey").value = s.apiKey;
-  $("settings-modal").classList.remove("hidden");
-}
-function syncProviderUI(){
-  const p = $("set-provider").value;
-  const def = PROVIDERS[p];
-  const eff = tmEffective({ provider: p, model: $("set-model").value, baseUrl: $("set-baseurl").value, apiKey: "" });
-  $("model-hint").textContent = "Default: " + def.defaultModel +
-    (def.altModels ? " (alternatif: " + def.altModels.join(", ") + ")" : "");
-  $("provider-note").textContent = def.hint;
-  $("wrap-baseurl").style.display = (p === "custom" || p === "router9") ? "" : "none";
-  if (!$("set-baseurl").value && p === "router9") $("set-baseurl").value = def.defaultBase;
-  /* Daftar model hasil ambilan provider SEBELUMNYA tidak boleh ikut tampil —
-   * menyesatkan (mis. model Kie terlihat saat provider diganti ke 9Router). */
-  const wl = $("wrap-model-list"); if (wl) wl.style.display = "none";
-  const mst = $("models-status"); if (mst) mst.textContent = "";
-}
-async function onFetchModels(){
-  const btn = $("btn-fetch-models");
-  const status = $("models-status");
-  btn.disabled = true;
-  status.textContent = "Menghubungi endpoint untuk mengambil daftar model…";
-  try {
-    const ids = await tmFetchModels({
-      provider: $("set-provider").value,
-      model: $("set-model").value.trim(),
-      baseUrl: $("set-baseurl").value.trim(),
-      apiKey: $("set-apikey").value.trim(),
-    });
-    const sel = $("set-model-list");
-    sel.innerHTML = "";
-    const first = document.createElement("option");
-    first.value = ""; first.textContent = "— pilih model —";
-    sel.appendChild(first);
-    ids.forEach((id) => {
-      const o = document.createElement("option");
-      o.value = id; o.textContent = id;
-      sel.appendChild(o);
-    });
-    $("wrap-model-list").style.display = "";
-    status.textContent = "Ditemukan " + ids.length + " model resmi dari endpoint ini. Pilih salah satu di bawah, lalu Simpan.";
-  } catch (err) {
-    status.textContent = "⚠️ " + (err && err.message ? err.message : String(err));
-  } finally {
-    btn.disabled = false;
-  }
-}
-function saveSettings(){
-  const s = {
-    provider: $("set-provider").value,
-    model: $("set-model").value.trim(),
-    baseUrl: $("set-baseurl").value.trim(),
-    apiKey: $("set-apikey").value.trim(),
-  };
-  tmSaveSettings(s);
-  $("settings-modal").classList.add("hidden");
-  toast("Pengaturan AI tersimpan di browser ini ✔", "ok");
+function onOpenGemini(){
+  if (!lastOutput) return;
+  // Gemini has no reliable built-in URL query prefill. Open and paste clipboard.
+  window.open("https://gemini.google.com/app", "_blank", "noopener,noreferrer");
+  copyPrompt().then(ok => toast(ok ? "Gemini dibuka. Tekan Ctrl+V untuk memasukkan prompt yang tersalin." : "Gemini dibuka. Salin prompt secara manual lalu tempel di Gemini.", ok ? "ok" : ""));
 }
 
 /* ---------- INIT ---------- */
@@ -853,32 +758,11 @@ document.addEventListener("DOMContentLoaded", () => {
   $("btn-home").addEventListener("click", renderDashboard);
   $("btn-back").addEventListener("click", renderDashboard);
   $("btn-generate").addEventListener("click", onGenerate);
-  $("btn-copy").addEventListener("click", onCopy);
   $("btn-chatgpt").addEventListener("click", onOpenChatGPT);
-  $("mode-prompt").addEventListener("click", () => setMode("prompt"));
-  $("mode-ai").addEventListener("click", () => setMode("ai"));
-  $("btn-ai-settings").addEventListener("click", openSettings);
-  $("btn-close-settings").addEventListener("click", () => $("settings-modal").classList.add("hidden"));
-  $("btn-save-settings").addEventListener("click", saveSettings);
-  $("btn-fetch-models").addEventListener("click", onFetchModels);
-  $("set-model-list").addEventListener("change", (e) => {
-    if (e.target.value) $("set-model").value = e.target.value;
-  });
-  $("set-provider").addEventListener("change", syncProviderUI);
-  $("settings-modal").addEventListener("click", (e) => {
-    if (e.target.id === "settings-modal") $("settings-modal").classList.add("hidden");
-  });
-  /* Tutup dropdown riwayat saat klik di luar atau tekan Escape. */
+  $("btn-gemini").addEventListener("click", onOpenGemini);
   document.addEventListener("click", (e) => {
-    if (tmHistOpen && !e.target.closest(".hist-dd") && !e.target.closest(".hist-wrap")) {
-      tmHistClose();
-    }
+    if (tmHistOpen && !e.target.closest(".hist-dd") && !e.target.closest(".hist-wrap")) tmHistClose();
   }, true);
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape") tmHistClose();
-  });
-  const foot = document.createElement("footer");
-  foot.textContent = "Tools Marketing — berjalan 100% di browser-mu. API key (Mode AI) hanya tersimpan di localStorage perangkatmu.";
-  document.body.appendChild(foot);
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape") tmHistClose(); });
   renderDashboard();
 });

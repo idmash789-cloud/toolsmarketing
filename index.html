@@ -3,113 +3,83 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Tools Marketing — Generator Iklan Meta Ads</title>
-<meta name="description" content="Tools Marketing: 4 tool AI untuk riset persona, value proposition, copywriting, dan narasi konten iklan Meta Ads. Mode Prompt gratis + Mode AI BYOK.">
+<title>Tools Marketing Studio — Premium Creative Workspace</title>
+<meta name="description" content="Tools Marketing Studio: empat tool profesional untuk riset buyer persona, value proposition, copywriting, dan narasi iklan. Generate prompt dan buka di ChatGPT atau Gemini, tanpa API key.">
+<meta name="theme-color" content="#080b10">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<header class="topbar">
-  <button class="logo" id="btn-home" title="Dashboard">
-    <span class="logo-mark">TM</span>
-    <span class="logo-text"><strong>Tools Marketing</strong><small>Generator Iklan Meta Ads</small></span>
+<header class="topbar"><div class="topbar-inner">
+  <button class="logo" id="btn-home" type="button" title="Dashboard">
+    <span class="logo-mark" aria-hidden="true">✦</span>
+    <span class="logo-text"><strong>TOOLS<span>MARKETING</span></strong><small>THE CREATIVE WORKSPACE</small></span>
   </button>
-  <div class="topbar-right">
-    <div class="mode-toggle" role="group" aria-label="Mode generate">
-      <button id="mode-prompt" class="mode-btn active">Mode Prompt</button>
-      <button id="mode-ai" class="mode-btn">Mode AI</button>
-    </div>
-    <button id="btn-ai-settings" class="icon-btn" title="Pengaturan AI (BYOK)">⚙️</button>
-  </div>
-</header>
+  <div class="topbar-right"><span class="header-edition">CREATIVE STUDIO / 2026</span><span class="topbar-badge">FREE WORKSPACE</span></div>
+</div></header>
 
 <main id="view-dashboard" class="container">
-  <section class="hero">
-    <h1>Halo! 👋 Mau bikin iklan apa hari ini?</h1>
-    <p>Pilih salah satu tool di bawah. Isi form di kiri, tekan <b>Generate</b>, hasil muncul di kanan — siap disalin atau diunduh.</p>
-    <p class="mode-note" id="mode-note"></p>
+  <section class="hero" aria-labelledby="hero-title">
+    <div class="hero-copy">
+      <p class="eyebrow"><span class="glow-dot"></span> INTELLIGENT MARKETING WORKSPACE <span class="eyebrow-sep">/</span> V.01</p>
+      <h1 id="hero-title">Ide lebih tajam.<br><em>Iklan lebih berkelas.</em></h1>
+      <p class="hero-lead">Kenali audiens, temukan nilai jual, dan ciptakan materi iklan yang punya arah. Seluruh proses kreatif marketing, dalam satu workspace profesional.</p>
+      <div class="hero-actions"><a class="hero-cta" href="#tool-cards">Jelajahi Workspace <span aria-hidden="true">↗</span></a><span class="hero-detail">4 tools terintegrasi &nbsp;·&nbsp; Gratis digunakan</span></div>
+      <p id="mode-note" class="mode-note">✦ Hasil berupa prompt yang siap dibawa ke ChatGPT atau Gemini. Tanpa API key.</p>
+    </div>
+    <div class="hero-visual" aria-hidden="true">
+      <div class="visual-head"><span>TOOLS MARKETING / OPERATING SYSTEM</span><span class="visual-live"><i></i> CREATIVE FLOW</span></div>
+      <div class="visual-stage"><div class="orbit orbit-one"></div><div class="orbit orbit-two"></div><div class="orbit orbit-three"></div><div class="visual-diamond">◆</div><span class="orb-label orb-one">01 / RESEARCH</span><span class="orb-label orb-two">03 / CREATE</span></div>
+      <div class="visual-foot"><div><small>YOUR PROCESS</small><strong>INSIGHT <b>→</b> IMPACT</strong></div><span>01 — 04</span></div>
+    </div>
   </section>
-  <section class="cards-grid" id="tool-cards"></section>
-  <section class="howto">
-    <h2>Cara kerja</h2>
-    <ol>
-      <li><b>Mode Prompt (gratis):</b> hasil generate adalah <i>prompt</i> detail yang siap ditempel ke ChatGPT / Gemini / AI favoritmu.</li>
-      <li><b>Mode AI (BYOK):</b> prompt yang sama dikirim langsung ke LLM pilihanmu dan menghasilkan <i>hasil akhir</i> di web ini. API key milikmu, tersimpan hanya di browser-mu (localStorage), tidak pernah dikirim ke mana pun selain provider yang kamu pilih.</li>
-      <li>Hasil <b>Buyer Persona</b> dan <b>VPC</b> tersimpan otomatis — bisa dipakai ulang lewat tombol <b>"Pakai VPC terakhir"</b> / <b>"Pakai Persona terakhir"</b> di tool Copywriting & Narasi Konten.</li>
-    </ol>
+  <section class="workspace-section" id="tools-section">
+    <div class="section-head"><div><p class="section-eyebrow">01 / YOUR TOOLKIT</p><h2>Satu alur kerja. <span>Empat keunggulan.</span></h2></div><p class="section-caption">Pilih titik awalmu. Ubah strategi dan insight menjadi materi iklan yang siap digunakan.</p></div>
+    <div class="cards-grid" id="tool-cards"></div>
   </section>
+  <section class="howto" aria-labelledby="howto-title">
+    <div class="howto-intro"><p class="section-eyebrow">02 / HOW IT WORKS</p><h2 id="howto-title">Dari strategi<br><span>menjadi eksekusi.</span></h2><p>Alur sederhana, kontrol penuh di tanganmu.</p></div>
+    <div class="howto-steps">
+      <div class="howto-step"><span>01</span><h3>Pilih tool</h3><p>Mulai dari riset persona, analisis manfaat produk, copywriting, atau narasi konten.</p></div>
+      <div class="howto-step"><span>02</span><h3>Isi brief</h3><p>Masukkan informasi produk dan target market, lalu generate prompt yang terstruktur.</p></div>
+      <div class="howto-step"><span>03</span><h3>Buka di AI favoritmu</h3><p>Bawa prompt ke ChatGPT atau Gemini. Data Persona dan VPC bisa dipakai lagi di tool berikutnya.</p></div>
+    </div>
+  </section>
+  <footer class="site-footer"><span>© 2026 Tools Marketing Studio</span><span>THINK CLEARLY. CREATE BOLDLY.</span></footer>
 </main>
 
 <main id="view-tool" class="container hidden">
-  <button class="back-btn" id="btn-back">← Kembali ke Dashboard</button>
+  <button class="back-btn" id="btn-back" type="button">← Kembali ke Workspace</button>
+  <p class="tool-kicker">YOUR WORKSPACE / CREATIVE BUILDER</p>
   <h1 id="tool-title"></h1>
   <p class="tool-desc" id="tool-desc"></p>
   <div class="tool-grid">
     <section class="panel">
-      <h2>Input Data</h2>
-      <p class="hist-note">💡 Klik kolom input untuk melihat rekomendasi isian sebelumnya.</p>
+      <span class="panel-kicker">01 / INPUT</span><h2>Informasi Campaign</h2>
+      <p class="hist-note">✦ Klik kolom untuk melihat riwayat isian sebelumnya.</p>
       <div id="tool-form"></div>
       <button id="btn-generate" class="btn-primary" disabled>Generate</button>
       <p class="hint" id="generate-hint">Lengkapi field bertanda * untuk mengaktifkan Generate.</p>
     </section>
     <section class="panel output-panel">
       <div class="output-head">
-        <h2>Hasil</h2>
+        <div><span class="panel-kicker">02 / OUTPUT</span><h2>Prompt Siap Pakai</h2></div>
         <div class="output-actions">
-          <button id="btn-copy" class="btn-ghost" disabled>📋 Salin</button>
-          <button id="btn-chatgpt" class="btn-ghost" disabled>💬 Buka di ChatGPT</button>
+          <button id="btn-chatgpt" class="btn-ghost ai-action" type="button" disabled>↗ Buka ChatGPT</button>
+          <button id="btn-gemini" class="btn-ghost ai-action" type="button" disabled>↗ Buka Gemini</button>
         </div>
       </div>
+      <p class="output-tip">ChatGPT: prompt terbuka di kolom chat. Gemini: prompt tersalin, tempel dengan Ctrl+V.</p>
       <div id="output-box" class="output-box"><p class="placeholder">Isi form di kiri, lalu tekan <b>Generate</b>.</p></div>
       <div id="loading-box" class="loading hidden"><div class="spinner"></div><p id="loading-text">Menyiapkan hasil…</p></div>
     </section>
   </div>
 </main>
 
-<div id="settings-modal" class="modal-overlay hidden">
-  <div class="modal">
-    <div class="modal-head">
-      <h2>Pengaturan AI (BYOK)</h2>
-      <button id="btn-close-settings" class="icon-btn">✕</button>
-    </div>
-    <p class="modal-note">Kunci API <b>hanya tersimpan di browser ini</b> (localStorage). Tidak ada di kode, tidak ada di repo, dan kamu tidak perlu mengirimkannya lewat chat ke siapa pun.</p>
-    <label>Provider
-      <select id="set-provider">
-        <option value="openai">OpenAI</option>
-        <option value="openrouter">OpenRouter</option>
-        <option value="groq">Groq</option>
-        <option value="gemini">Google Gemini</option>
-        <option value="kie">Kie AI</option>
-        <option value="router9">9Router (lokal)</option>
-        <option value="custom">Custom (OpenAI-compatible)</option>
-      </select>
-    </label>
-    <label>Model
-      <input type="text" id="set-model" placeholder="nama model">
-    </label>
-    <p class="model-hint" id="model-hint"></p>
-    <div style="margin:6px 0 2px">
-      <button type="button" id="btn-fetch-models" class="btn-ghost">🔄 Ambil daftar model dari endpoint</button>
-    </div>
-    <p class="model-hint" id="models-status"></p>
-    <label id="wrap-model-list" style="display:none">Pilih model dari daftar resmi endpoint
-      <select id="set-model-list"></select>
-    </label>
-    <label id="wrap-baseurl">Base URL
-      <input type="text" id="set-baseurl" placeholder="https://…">
-    </label>
-    <label>API Key
-      <input type="password" id="set-apikey" placeholder="masukkan API key di sini">
-    </label>
-    <p class="provider-note" id="provider-note"></p>
-    <div class="modal-actions">
-      <button id="btn-save-settings" class="btn-primary">Simpan</button>
-    </div>
-  </div>
-</div>
-
 <div id="toast" class="toast hidden"></div>
 
-<script src="ai.js"></script>
 <script src="app.js"></script>
 </body>
 </html>
