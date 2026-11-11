@@ -46,3 +46,21 @@ button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid #f4d9
 @media(max-width:850px){.login-shell{grid-template-columns:1fr}.login-story{min-height:unset;border-right:0;border-bottom:1px solid #d8b98425;padding:25px 25px 32px}.story-main{padding:36px 0 12px}.story-main h1{font-size:clamp(33px,6vw,48px);margin:20px 0}.story-main>p{font-size:13px;max-width:620px}.feature-list,.story-bottom{display:none}.login-area{min-height:unset;padding:25px 25px 35px}.login-box{padding:42px 0}.login-footer{margin-top:16px}}
 @media(max-width:480px){.login-story{padding:22px 18px 27px}.brand-icon{width:38px;height:38px;font-size:23px}.brand-name strong{font-size:11px}.brand-name small{font-size:7px}.story-main{padding:31px 0 0}.eyebrow{font-size:9px;letter-spacing:.1em}.story-main h1{font-size:35px}.story-main>p{font-size:12px}.login-area{padding:22px 18px 26px}.login-top{gap:10px}.back-home{font-size:11px}.login-box{padding:39px 0 23px}.login-box h2{font-size:40px}.form-description{font-size:13px}.login-footer{font-size:9px;flex-direction:column;gap:6px}}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{transition:none!important;animation:none!important}}
+
+
+/* Registration / login segmented premium tabs */
+[hidden]{display:none!important}
+.auth-tabs{display:grid;grid-template-columns:1fr 1fr;gap:4px;margin:0 0 35px;padding:5px;background:#141a22;border:1px solid #3c4149;border-radius:11px;box-shadow:inset 0 1px 4px #0003}
+.auth-tab{padding:12px 14px;border:0;background:transparent;color:#a5acb7;font-size:12px;font-weight:800;border-radius:8px;cursor:pointer;transition:background .2s,color .2s}
+.auth-tab.active{background:linear-gradient(120deg,#e9cb97,#c09c65);color:#181713;box-shadow:0 4px 15px #0006}
+.auth-tab:hover:not(.active){color:#f4e2c1;background:#252b33}
+.auth-intro{animation:authFade .22s ease-out}
+@keyframes authFade{from{opacity:.55;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+#register-form{animation:authFade .22s ease-out}
+#register-form .form-group{margin-bottom:16px}
+.field-help{font-size:11px;line-height:1.6;color:#95a4b3;margin-top:8px}
+.switch-link{border:0;background:none;padding:0;color:#e9ca95;font-weight:800;font-size:inherit;cursor:pointer;text-decoration:underline;text-underline-offset:4px}
+.switch-link:hover{color:#ffe0a4}
+.login-box{max-width:440px}
+@media(max-width:850px){.auth-tabs{margin-bottom:26px}}
+@media(prefers-reduced-motion:reduce){.auth-intro,#register-form{animation:none}}

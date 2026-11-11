@@ -415,3 +415,9 @@ html.auth-pending body:after{
   .member-logout{font-size:10px;padding:7px 8px}
   .topbar-badge{display:none}
 }
+
+/* Header link to premium member registration */
+.header-auth-link{display:inline-flex;align-items:center;justify-content:center;color:#e6c68d;border:1px solid #9a7b4d;background:#d6b68112;padding:10px 14px;border-radius:8px;font-size:11px;font-weight:800;text-decoration:none;white-space:nowrap;transition:background .2s}
+.header-auth-link:hover{background:#d6b68125;color:#ffe3b1}
+@media(max-width:620px){.header-auth-link{font-size:10px;padding:8px 9px}}
+@media(max-width:370px){.header-auth-link{padding:7px 7px;font-size:9px}}

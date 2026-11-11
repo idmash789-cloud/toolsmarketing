@@ -15,6 +15,8 @@
       const data = await response.json();
       if (!data || !data.user || !data.user.email) throw new Error("No session");
       const user=data.user;
+      const guestLink = document.querySelector(".header-auth-link");
+      if (guestLink) guestLink.remove();
       const nav = document.querySelector(".topbar-right");
       if (nav) {
         const profile=document.createElement("div");
