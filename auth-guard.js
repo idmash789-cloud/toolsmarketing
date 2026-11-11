@@ -18,6 +18,13 @@
       const guestLink = document.querySelector(".header-auth-link");
       if (guestLink) guestLink.remove();
       const nav = document.querySelector(".topbar-right");
+      if (nav && user.isOwner === true) {
+        const link=document.createElement("a");
+        link.href="konfirmasi.html";
+        link.className="member-manage-link";
+        link.textContent="Kelola Pengguna";
+        nav.appendChild(link);
+      }
       if (nav) {
         const profile=document.createElement("div");
         profile.className="member-nav";
