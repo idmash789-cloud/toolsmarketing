@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#080b10">
+  <meta name="description" content="Masuk ke Tools Marketing Studio, ruang kerja premium untuk riset dan produksi materi iklan.">
+  <title>Login — Tools Marketing Studio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="login.css">
+</head>
+<body>
+<div class="login-shell">
+  <section class="login-story" aria-label="Tentang Tools Marketing Studio">
+    <header class="story-header">
+      <a href="index.html" class="brand" aria-label="Tools Marketing Studio, beranda">
+        <span class="brand-icon" aria-hidden="true">✦</span>
+        <span class="brand-name"><strong>TOOLS<span>MARKETING</span></strong><small>THE CREATIVE WORKSPACE</small></span>
+      </a>
+      <span class="edition">STUDIO / 2026</span>
+    </header>
+    <div class="story-main">
+      <div class="eyebrow"><span class="live-dot"></span> YOUR PRIVATE WORKSPACE <span class="slash">/</span> ACCESS 01</div>
+      <h1>Lebih dari<br>sekadar tools.<br><em>Ini ruang kreasimu.</em></h1>
+      <p>Mulai dari memahami audiens, merumuskan nilai produk, hingga menyusun naskah iklan — dalam satu ruang kerja eksklusif yang dirancang untuk marketer.</p>
+      <div class="feature-list">
+        <div><span class="feature-mark">01</span><span><strong>Marketing Intelligence</strong><small>Strategi yang dimulai dari insight</small></span><span class="feature-arrow">↗</span></div>
+        <div><span class="feature-mark">02</span><span><strong>Creative Production</strong><small>Ide menjadi materi iklan yang terarah</small></span><span class="feature-arrow">↗</span></div>
+        <div><span class="feature-mark">03</span><span><strong>Personal Workspace</strong><small>Alur kerja sederhana, fokus pada hasil</small></span><span class="feature-arrow">↗</span></div>
+      </div>
+    </div>
+    <div class="story-bottom">
+      <div class="insight-art" aria-hidden="true"><div class="circle c-one"></div><div class="circle c-two"></div><div class="circle c-three"></div><span>✦</span></div>
+      <div class="story-footnote"><span>THINK CLEARLY.</span><strong>CREATE BOLDLY.</strong></div>
+      <span class="story-copyright">© 2026 TOOLS MARKETING</span>
+    </div>
+  </section>
+
+  <main class="login-area">
+    <div class="login-top"><span class="member-label"><span class="member-dot"></span> MEMBER ACCESS</span><a href="index.html" class="back-home">↖ Kembali ke Website</a></div>
+    <div class="login-box">
+      <div class="form-emblem" aria-hidden="true">✦</div>
+      <span class="form-eyebrow">WELCOME BACK</span>
+      <h2>Selamat datang<br><em>kembali.</em></h2>
+      <p class="form-description">Masuk ke akun untuk melanjutkan workflow marketing-mu.</p>
+      <form id="login-form" novalidate>
+        <div class="form-group">
+          <label for="login-email">Alamat Email</label>
+          <div class="input-shell"><span class="input-icon" aria-hidden="true">✉</span><input id="login-email" name="email" type="email" autocomplete="username" inputmode="email" placeholder="nama@email.com" required maxlength="254"></div>
+        </div>
+        <div class="form-group">
+          <label for="login-password">Password</label>
+          <div class="input-shell"><span class="input-icon" aria-hidden="true">⛨</span><input id="login-password" name="password" type="password" autocomplete="current-password" placeholder="Masukkan password" required minlength="12"><button type="button" id="toggle-password" class="reveal-btn" aria-label="Tampilkan password" aria-pressed="false">Lihat</button></div>
+        </div>
+        <div class="form-options"><span class="secure-note">◈ Akses akun terenkripsi</span><span class="private-note">KHUSUS MEMBER</span></div>
+        <button class="submit-btn" id="login-submit" type="submit"><span>Masuk ke Workspace</span><span aria-hidden="true">↗</span></button>
+        <div role="status" aria-live="polite" id="login-status" class="login-status" hidden></div>
+      </form>
+      <div class="login-divider"><span>AKSES EKSKLUSIF</span></div>
+      <p class="help-text">Belum memiliki akun? <strong>Hubungi admin</strong> untuk mendapatkan akses.</p>
+      <p class="configuration-note" id="configuration-note" hidden>Integrasi Google Sheets belum diaktifkan oleh admin. Halaman login ini adalah pratinjau desain.</p>
+    </div>
+    <footer class="login-footer"><span>© 2026 Tools Marketing Studio</span><span>SECURE MEMBER PORTAL</span></footer>
+  </main>
+</div>
+<script src="auth-config.js"></script>
+<script src="login.js"></script>
+</body>
+</html>
