@@ -25,3 +25,4 @@ period = 60
 # GOOGLE_PRIVATE_KEY
 # SESSION_SECRET
 # ADMIN_SETUP_TOKEN
+# OWNER_EMAIL (email akun pemilik, bukan akun umum)
