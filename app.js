@@ -354,6 +354,7 @@ function openTool(id){
   $("output-box").innerHTML = '<p class="placeholder">Isi form di kiri, lalu tekan <b>Generate</b>.</p>';
   $("btn-gemini").disabled = true;
   $("btn-chatgpt").disabled = true;
+  $("btn-copy").disabled = true;
   renderForm();
   renderMode();
   window.scrollTo(0, 0);
@@ -765,39 +766,67 @@ function showOutput(text){
   $("loading-box").classList.add("hidden");
   $("btn-chatgpt").disabled = false;
   $("btn-gemini").disabled = false;
+  $("btn-copy").disabled = false;
   box.scrollTop = 0;
 }
 
-/* Prompt is copied as a reliable fallback before sending the visitor to an AI service. */
-function copyPrompt(){
-  if (!lastOutput) return Promise.resolve(false);
-  if (navigator.clipboard && navigator.clipboard.writeText){
-    return navigator.clipboard.writeText(lastOutput).then(() => true).catch(fallbackCopy);
-  }
-  return Promise.resolve(fallbackCopy());
-}
+/* Start copying during the actual click gesture, BEFORE opening a new tab.
+   Browser permissions may deny clipboard writes after focus moves to ChatGPT. */
 function fallbackCopy(){
-  const el = document.createElement("textarea");
-  el.value = lastOutput;
-  el.style.position = "fixed"; el.style.left = "-9999px";
-  document.body.appendChild(el); el.select();
-  let ok = false;
-  try { ok = document.execCommand("copy"); } catch(e){}
+  const el=document.createElement("textarea");
+  el.value=lastOutput;
+  el.setAttribute("readonly","");
+  el.style.position="fixed";
+  el.style.left="-9999px";
+  el.style.top="0";
+  document.body.appendChild(el);
+  el.focus();
+  el.select();
+  let ok=false;
+  try{ok=document.execCommand("copy");}catch(e){}
   el.remove();
   return ok;
 }
+function copyPrompt(){
+  if(!lastOutput)return Promise.resolve(false);
+  // Synchronous fallback is attempted while this page still owns user activation.
+  const copied=fallbackCopy();
+  if(navigator.clipboard && typeof navigator.clipboard.writeText==="function"){
+    try{
+      return navigator.clipboard.writeText(lastOutput).then(()=>true).catch(()=>copied);
+    }catch(e){return Promise.resolve(copied);}
+  }
+  return Promise.resolve(copied);
+}
+function onCopyPrompt(){
+  if(!lastOutput)return;
+  copyPrompt().then(ok=>toast(
+    ok?"Prompt berhasil disalin. Tempel di ChatGPT/Gemini dengan Ctrl+V.":"Tidak dapat menyalin otomatis. Pilih teks output lalu salin manual.",
+    ok?"ok":""
+  ));
+}
 function onOpenChatGPT(){
-  if (!lastOutput) return;
-  // ChatGPT supports prefill with ?q=. Very long URLs can be rejected by browsers.
-  const url = lastOutput.length < 5500 ? "https://chatgpt.com/?q=" + encodeURIComponent(lastOutput) : "https://chatgpt.com/";
-  window.open(url, "_blank", "noopener,noreferrer");
-  copyPrompt().then(ok => toast(ok ? "ChatGPT dibuka. Prompt juga disalin sebagai cadangan." : "ChatGPT dibuka. Jika prompt belum tampil, salin teks hasil secara manual.", ok ? "ok" : ""));
+  if(!lastOutput)return;
+  // ChatGPT's URL prompt prefill is best-effort and can fail after login/redirects.
+  // Limit by *encoded URL length*, not raw prompt length.
+  const promptURL="https://chatgpt.com/?prompt="+encodeURIComponent(lastOutput);
+  const canPrefill=promptURL.length<=7500;
+  // Begin clipboard copy before window.open, not after the browser changes focus.
+  const copied=copyPrompt();
+  window.open(canPrefill?promptURL:"https://chatgpt.com/","_blank","noopener,noreferrer");
+  copied.then(ok=>{
+    if(canPrefill){
+      toast(ok?"ChatGPT dibuka. Jika prompt belum terisi, tekan Ctrl+V (sudah disalin).":"ChatGPT dibuka. Jika prompt kosong, klik Salin Prompt lalu Ctrl+V.",ok?"ok":"");
+    }else{
+      toast(ok?"Prompt terlalu panjang untuk tautan otomatis; sudah disalin. Tempel di ChatGPT dengan Ctrl+V.":"Prompt terlalu panjang. Klik Salin Prompt lalu tempel manual.",ok?"ok":"");
+    }
+  });
 }
 function onOpenGemini(){
-  if (!lastOutput) return;
-  // Gemini has no reliable built-in URL query prefill. Open and paste clipboard.
-  window.open("https://gemini.google.com/app", "_blank", "noopener,noreferrer");
-  copyPrompt().then(ok => toast(ok ? "Gemini dibuka. Tekan Ctrl+V untuk memasukkan prompt yang tersalin." : "Gemini dibuka. Salin prompt secara manual lalu tempel di Gemini.", ok ? "ok" : ""));
+  if(!lastOutput)return;
+  const copied=copyPrompt();
+  window.open("https://gemini.google.com/app","_blank","noopener,noreferrer");
+  copied.then(ok=>toast(ok?"Gemini dibuka. Prompt disalin, tekan Ctrl+V untuk menempel.":"Gemini dibuka. Klik Salin Prompt jika teks belum ada di clipboard.",ok?"ok":""));
 }
 
 /* ---------- INIT ---------- */
@@ -806,6 +835,7 @@ document.addEventListener("DOMContentLoaded", () => {
   $("btn-back").addEventListener("click", renderDashboard);
   $("btn-generate").addEventListener("click", onGenerate);
   $("btn-chatgpt").addEventListener("click", onOpenChatGPT);
+  $("btn-copy").addEventListener("click", onCopyPrompt);
   $("btn-gemini").addEventListener("click", onOpenGemini);
   document.addEventListener("click", (e) => {
     if (tmHistOpen && !e.target.closest(".hist-dd") && !e.target.closest(".hist-wrap")) tmHistClose();
